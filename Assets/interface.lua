@@ -256,6 +256,7 @@ local UiIntilize = {
     ["Stack Auto farm"] = {
         {Mode="Label",Title="Can Turn On Many Auto Farm Cuz Stackable"},
         {Mode="Toggle",Title="Auto Elite",Description="Sea 3 Function Only",Args={"Elite","Enable"}},
+        {Mode="Toggle",Title="Auto Tyrant of the Skies",Description="Sea 3 only",Args={"Tyrant Skies","Enable"}},
         {Mode="Toggle",Title="Auto Pirate Raid",Description="Sea 3 Function Only",Args={"Pirate Raid","Enable"}},
         {Mode="Toggle",Title="Auto Open Haki Pad",Description="Sea 3 Function Only",Args={"Open Pad","Enable"}},
         {Mode="Toggle",Title="Auto Spawn Rip Indra",Description="Sea 3 Function Only", Args = {"Spawn Rip Indra","Enable"}},
@@ -394,11 +395,20 @@ local UiIntilize = {
         },
         {
             Mode = "Toggle",
-            Title = "Auto Full Volcano",
+            Title = "Auto Fully Volcano",
             Description = "",
             Args = {"AutoFullVolcano", "Enable"},
             OnChange = function(state)
                 getgenv().Setting.AutoFullVolcano.Enable = state
+            end
+        },
+        {
+            Mode = "Toggle",
+            Title = "Fully Items Prehistoric Island",
+            Description = "",
+            Args = {"FullItemsPrehistoric", "Enable"},
+            OnChange = function(state)
+                getgenv().Setting.FullItemsPrehistoric.Enable = state
             end
         },
         {
@@ -469,6 +479,7 @@ local UiIntilize = {
         {Mode="Label",Title="PrehistoricIsland Status"},
         {Mode="Label",Title="Kitsune Status"},
         {Mode="Label",Title="FullMoon Status"},
+        {Mode="Label",Title="Eyes"},
     },
     ["Player-Status"] = {
         {Mode="Label",Title="W.I.P"}
@@ -1712,10 +1723,11 @@ local UiIntilize = {
         },
         {
             Mode = "Toggle",
-            Title = "Click For fruit",
-            Description = "For Kitsune, Mammoth, Light, Ice, ...",
-            Args = {"SkillsSettingRemake","ClickFruit"},
+            Title = "Use Dragonstorm",
+            Description = "",
+            Args = {"UseDragonStorm"},
             OnChange = function(state)
+                getgenv().Setting.UseDragonStorm = state
                 SettingManager:Save()
             end
         },
