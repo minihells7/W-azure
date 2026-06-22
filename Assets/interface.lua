@@ -23,7 +23,7 @@ local UiOrders
 if getgenv().OneClickUi then
     UiOrders = {"Status","Setting","Game-Server","One Click","One Click Debugger"}
 else
-     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Vocalnic","Status","Player-Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Sub Class","Shop","Setting","Webhook","Game-Server","One Click","One Click Debugger"}
+     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Dojo","Vulcanic","Status","Player-Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Sub Class","Shop","Setting","Webhook","Game-Server","One Click","One Click Debugger"}
 end
 local TabCollections = {
 }
@@ -366,7 +366,7 @@ local UiIntilize = {
         {Mode="Toggle",Title="Auto Get Rainbow Haki",Description="",Args = {"Rainbow Haki","Enable"}},
         {Mode="Toggle",Title="Rainbow Haki Hop",Description="Hopping For Fast Getting Rainbow Haki",Args = {"Rainbow Haki","Hop"}},
     },
-    ["Vocalnic"] = {
+    ["Dojo"] = {
         {
             Mode = "Toggle",
             Title = "Auto Dojo Trainer",
@@ -377,12 +377,49 @@ local UiIntilize = {
         },
         {
             Mode = "Toggle",
-            Title = "Auto Ember (Dragon Hunter)",
+            Title = "Auto Dragon Hunter",
             Args = {"DragonHunterQuest", "Enable"},
             OnChange = function(state)
                 getgenv().Setting.DragonHunterQuest.Enable = state
             end
         },
+        {Mode = "Label", Title = "Draco"},
+        {
+            Mode = "Toggle",
+            Title = "Auto Trial Draco",
+            Args = {"TrialDraco", "Enable"},
+            OnChange = function(state)
+                getgenv().Setting.TrialDraco.Enable = state
+            end
+        },
+        {
+            Mode = "Toggle",
+            Title = "Auto Train Draco",
+            Args = {"TrainDraco", "Enable"},
+            OnChange = function(state)
+                getgenv().Setting.TrainDraco.Enable = state
+            end
+        },
+        {
+            Mode = "Toggle",
+            Title = "Auto Unlock v3 Draco",
+            Description = "Unlocks V2 and V3 Draco",
+            Args = {"UnlockDracoV3", "Enable"},
+            OnChange = function(state)
+                getgenv().Setting.UnlockDracoV3.Enable = state
+            end
+        },
+        {
+            Mode = "Toggle",
+            Title = "Auto Fully Draco Trial",
+            Description = "Auto vulcanic and trial",
+            Args = {"FullyDracoTrial", "Enable"},
+            OnChange = function(state)
+                getgenv().Setting.FullyDracoTrial.Enable = state
+            end
+        },
+    },
+    ["Vulcanic"] = {
         {
             Mode = "Toggle",
             Title = "Auto Find PrehistoricIsland",
@@ -465,7 +502,6 @@ local UiIntilize = {
                 getgenv().Setting.ResetAfterVolcano.Enable = state
             end
         },
-        
     },
     ["Status"] = {
         {Mode="Label",Title="Client Time"},
