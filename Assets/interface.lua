@@ -2121,7 +2121,7 @@ print("Adding Shop Items")
     for _,Name in pairs(UiOrders) do
         TabCollections[Name] = Window:AddTab({ Title = Name, Icon = "" })
         local Tab = TabCollections[Name]
-        for i,v in pairs(UiIntilize[Name]) do   
+        for i,v in pairs(UiIntilize[Name] or {}) do   
             if type(v)== 'function' then 
                 for i2,v2 in pairs(v()) do
                     BuildUI(Tab,i2,v2,Name)
