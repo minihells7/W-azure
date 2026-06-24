@@ -21,9 +21,9 @@ end
 local Window = getgenv().Window
 local UiOrders
 if getgenv().OneClickUi then
-    UiOrders = {"Status","Setting","Game-Server","One Click","One Click Debugger"}
+    UiOrders = {"Status","Setting","Game-Server"}
 else
-     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Dojo","Prehistoric island","Status","Player-Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Sub Class","Shop","Setting","Webhook","Game-Server","One Click","One Click Debugger"}
+     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Dojo","Prehistoric Island","Status","Player-Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Sub Class","Shop","Setting","Game-Server"}
 end
 local TabCollections = {
 }
@@ -516,6 +516,9 @@ local UiIntilize = {
         {Mode="Label",Title="Kitsune Status"},
         {Mode="Label",Title="FullMoon Status"},
         {Mode="Label",Title="Eyes"},
+    },
+    ["Player-Status"] = {
+        {Mode="Label",Title="W.I.P"}
     },
     ["Fruit"] = {
         {
@@ -1814,7 +1817,7 @@ local UiIntilize = {
             return MultiBuild
         end,
     },
-    --[[["Webhook"] = {
+    ["Webhook"] = {
         {
             Mode = "TextBox",
             Title = "Webhook",
@@ -1830,7 +1833,7 @@ local UiIntilize = {
                 getgenv().WebhookCenter.SimpleSend("Testing","Success")
             end
         },
-    },]]
+    },
     ["Game-Server"] = {
         {
             Mode = "Toggle",
@@ -1968,7 +1971,7 @@ local UiIntilize = {
             end
         },
     },
-    --[[["One Click"] = {
+    ["One Click"] = {
         {
             Mode = "Toggle",
             Title = "Start One Click",
@@ -2058,7 +2061,7 @@ local UiIntilize = {
         {Mode="Label",Title="Travel Sea 3"},
         
     },
-}]]
+}
 print("Adding Shop Items")
     for _,v in pairs((getgenv().IslandVariable and getgenv().IslandVariable.Items) or {}) do 
         for i,t in pairs(v) do
