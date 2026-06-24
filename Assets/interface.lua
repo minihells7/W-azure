@@ -1835,14 +1835,14 @@ local UiIntilize = {
         },
     },
     ["Game-Server"] = {
-        {
+        --[[{
             Mode = "Toggle",
             Title = "Panel [Premium]",
             Args = {"Panel","Enable"},
             OnChange = function(state)
                 SettingManager:Save()
             end
-        },
+        },]]
         {
             Mode = "Button",
             Title = "Copy Job Id",
@@ -1852,7 +1852,7 @@ local UiIntilize = {
         },
         {
             Mode = "TextBox",
-            Title = "Server Code [Premium]",
+            Title = "Server Code",
             Callback = function(arg)
                 getgenv().PreServerCode = arg
             end
@@ -1877,7 +1877,7 @@ local UiIntilize = {
                 end
             end
         },
-        {
+        --[[{
             Mode = "TextBox",
             Title = "Job Id",
             Callback = function(arg)
@@ -1901,7 +1901,7 @@ local UiIntilize = {
                     print(err)
                 end
             end
-        },
+        },]]
         {
             Mode = "Toggle",
             Title = "No Fog",
