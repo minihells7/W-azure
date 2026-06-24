@@ -23,7 +23,7 @@ local UiOrders
 if getgenv().OneClickUi then
     UiOrders = {"Status","Setting","Game-Server","One Click","One Click Debugger"}
 else
-     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Dojo","Vulcanic","Status","Player-Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Sub Class","Shop","Setting","Webhook","Game-Server","One Click","One Click Debugger"}
+     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Dojo","Prehistoric island","Status","Player-Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Sub Class","Shop","Setting","Webhook","Game-Server","One Click","One Click Debugger"}
 end
 local TabCollections = {
 }
@@ -383,7 +383,7 @@ local UiIntilize = {
                 getgenv().Setting.DragonHunterQuest.Enable = state
             end
         },
-        {Mode = "Label", Title = "Draco"},
+        {Mode = "Label", Title = "Trial"},
         {
             Mode = "Toggle",
             Title = "Auto Trial Draco",
@@ -402,11 +402,11 @@ local UiIntilize = {
         },
         {
             Mode = "Toggle",
-            Title = "Auto Unlock v3 Draco",
+            Title = "Auto Unlock Draco",
             Description = "Unlocks V2 and V3 Draco",
             Args = {"UnlockDracoV3", "Enable"},
             OnChange = function(state)
-                getgenv().Setting.UnlockDracoV3.Enable = state
+                getgenv().Setting.UnlockDracoV3.Enable = state -- api retorna
             end
         },
         {
@@ -419,7 +419,7 @@ local UiIntilize = {
             end
         },
     },
-    ["Vulcanic"] = {
+    ["Prehistoric Island"] = {
         {
             Mode = "Toggle",
             Title = "Auto Find PrehistoricIsland",
@@ -516,9 +516,6 @@ local UiIntilize = {
         {Mode="Label",Title="Kitsune Status"},
         {Mode="Label",Title="FullMoon Status"},
         {Mode="Label",Title="Eyes"},
-    },
-    ["Player-Status"] = {
-        {Mode="Label",Title="W.I.P"}
     },
     ["Fruit"] = {
         {
@@ -1817,7 +1814,7 @@ local UiIntilize = {
             return MultiBuild
         end,
     },
-    ["Webhook"] = {
+    --[[["Webhook"] = {
         {
             Mode = "TextBox",
             Title = "Webhook",
@@ -1833,7 +1830,7 @@ local UiIntilize = {
                 getgenv().WebhookCenter.SimpleSend("Testing","Success")
             end
         },
-    },
+    },]]
     ["Game-Server"] = {
         {
             Mode = "Toggle",
@@ -1971,7 +1968,7 @@ local UiIntilize = {
             end
         },
     },
-    ["One Click"] = {
+    --[[["One Click"] = {
         {
             Mode = "Toggle",
             Title = "Start One Click",
@@ -2061,7 +2058,7 @@ local UiIntilize = {
         {Mode="Label",Title="Travel Sea 3"},
         
     },
-}
+}]]
 print("Adding Shop Items")
     for _,v in pairs((getgenv().IslandVariable and getgenv().IslandVariable.Items) or {}) do 
         for i,t in pairs(v) do
