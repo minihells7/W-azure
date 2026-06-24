@@ -23,7 +23,7 @@ local UiOrders
 if getgenv().OneClickUi then
     UiOrders = {"Status","Setting","Game-Server"}
 else
-     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Dojo","Prehistoric Island","Status","Player-Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Sub Class","Shop","Setting","Game-Server"}
+     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Dojo","Prehistoric Island","Status","Player-Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Shop","Setting","Game-Server"}
 end
 local TabCollections = {
 }
@@ -1843,7 +1843,7 @@ local UiIntilize = {
                 SettingManager:Save()
             end
         },]]
-        {
+        --[[{
             Mode = "Button",
             Title = "Copy Job Id",
             Callback = function ()
@@ -1856,16 +1856,16 @@ local UiIntilize = {
             Callback = function(arg)
                 getgenv().PreServerCode = arg
             end
-        },
-        {
+        },]]
+        --[[{
             Mode = "Toggle",
             Title = "Join Server Code",
             Args = {"Misc","__PreJoin"},
             OnChange = function(state)
                 SettingManager:Save()
             end
-        },
-        {
+        },]]
+        --[[{
             Mode = "Button",
             Title = "Clear Server Code",
             Callback = function(arg)
@@ -1876,8 +1876,8 @@ local UiIntilize = {
                     print(err)
                 end
             end
-        },
-        --[[{
+        },]]
+        {
             Mode = "TextBox",
             Title = "Job Id",
             Callback = function(arg)
