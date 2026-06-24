@@ -1835,48 +1835,6 @@ local UiIntilize = {
         },
     },
     ["Game-Server"] = {
-        --[[{
-            Mode = "Toggle",
-            Title = "Panel [Premium]",
-            Args = {"Panel","Enable"},
-            OnChange = function(state)
-                SettingManager:Save()
-            end
-        },]]
-        --[[{
-            Mode = "Button",
-            Title = "Copy Job Id",
-            Callback = function ()
-                setclipboard(tostring(game.JobId))
-            end
-        },
-        {
-            Mode = "TextBox",
-            Title = "Server Code",
-            Callback = function(arg)
-                getgenv().PreServerCode = arg
-            end
-        },]]
-        --[[{
-            Mode = "Toggle",
-            Title = "Join Server Code",
-            Args = {"Misc","__PreJoin"},
-            OnChange = function(state)
-                SettingManager:Save()
-            end
-        },]]
-        --[[{
-            Mode = "Button",
-            Title = "Clear Server Code",
-            Callback = function(arg)
-                local _, err = pcall(function ()
-                    ElementsCollection["Game-Server"]["Server Code [Premium]"]:SetValue("")
-                end)
-                if err then
-                    print(err)
-                end
-            end
-        },]]
         {
             Mode = "TextBox",
             Title = "Job Id",
@@ -1901,7 +1859,7 @@ local UiIntilize = {
                     print(err)
                 end
             end
-        },]]
+        },
         {
             Mode = "Toggle",
             Title = "No Fog",
