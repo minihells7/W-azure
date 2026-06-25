@@ -977,7 +977,21 @@ local UiIntilize = {
                 getgenv().Setting.Raid.GetFruitUnder1M = state
                 SettingManager:Save()
             end
-        }
+        },
+        {
+            Mode = "Label",
+            Title = "Dungeon",
+        },
+        {
+            Mode = "Toggle",
+            Title = "Auto Dungeon",
+            Description = "",
+            Args = {"Dungeon", "Enable"},
+            OnChange = function(state)
+                getgenv().Setting.Dungeon.Enable = state
+                SettingManager:Save()
+            end
+        },
     },
     ["Sea Events"] = {
         {
