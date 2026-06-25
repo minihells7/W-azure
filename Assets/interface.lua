@@ -19,6 +19,51 @@ if not getgenv().Window then
     })
 end
 local Window = getgenv().Window
+
+-- idk test
+local LocalizationService = game:GetService("LocalizationService")
+local HttpService = game:GetService("HttpService")
+
+local TranslationUrls = {
+    ["th"] = "https://raw.githubusercontent.com/minihells7/W-azure/refs/heads/main/Translation/ThaiWAzure.json",
+}
+
+local Translations = {}
+
+local function LoadTranslation()
+    local ok, locale = pcall(function()
+        return LocalizationService.RobloxLocaleId
+    end)
+    if not ok or not locale then return end
+
+    local lang = string.lower(string.sub(locale, 1, 2))
+    local url = TranslationUrls[lang]
+    if not url then return end
+
+    local success, result = pcall(function()
+        return HttpService:GetAsync(url)
+    end)
+
+    if success and result then
+        local parsed_ok, parsed = pcall(function()
+            return HttpService:JSONDecode(result)
+        end)
+        if parsed_ok and parsed then
+            Translations = parsed
+        end
+    end
+end
+
+local function T(key)
+    if not key then return key end
+    local val = Translations[key]
+    if not val then return key end
+    if type(val) == "table" then return val[1] end
+    return val
+end
+
+LoadTranslation()
+
 local UiOrders
 if getgenv().OneClickUi then
     UiOrders = {"Status","Setting","Game-Server"}
@@ -2064,10 +2109,10 @@ print("Adding Shop Items")
                 pointer = pointer[args[i]]
             end
             local BuildToggle = {}
-            BuildToggle.Title = v.Title
+            BuildToggle.Title = T(v.Title)
             BuildToggle.Default = pointer[args[#args]]
             if v.Description then
-                BuildToggle.Description  = v.Description
+                BuildToggle.Description = T(v.Description)
             end
             ElementsCollection[Name][v.Title] =  Tab:AddToggle(v.Title, BuildToggle)
             ElementsCollection[Name][v.Title]:OnChanged(function()
@@ -2078,25 +2123,25 @@ print("Adding Shop Items")
             end)
         elseif v.Mode == "Label" then 
             local BuildLabel = {}
-            BuildLabel.Title=v.Title
+            BuildLabel.Title = T(v.Title)
             if v.Content then
                 BuildLabel.Content = v.Content
             end
             ElementsCollection[Name][v.Title] = Tab:AddParagraph(BuildLabel)
         elseif v.Mode == "Button" then
             local BuildButton = {}
-            BuildButton.Title = v.Title
+            BuildButton.Title = T(v.Title)
             BuildButton.Callback = v.Callback
             if v.Description then 
-                BuildButton.Description = v.Description
+                BuildButton.Description = T(v.Description)
             end
             ElementsCollection[Name][v.Title]  = Tab:AddButton(BuildButton) 
         elseif v.Mode == "Slider" then
             local BuildSlider = {}
-            BuildSlider.Title = v.Title
+            BuildSlider.Title = T(v.Title)
 
             if v.Description then 
-                BuildSlider.Description = v.Description
+                BuildSlider.Description = T(v.Description)
             end
             if v.Default then
                 BuildSlider.Default = v.Default
@@ -2110,10 +2155,10 @@ print("Adding Shop Items")
             end)
         elseif v.Mode == "Dropdown" then
             local BuildDropdown = {}
-            BuildDropdown.Title = v.Title
+            BuildDropdown.Title = T(v.Title)
 
             if v.Description then 
-                BuildDropdown.Description = v.Description
+                BuildDropdown.Description = T(v.Description)
             end
             if v.Multi then
                 BuildDropdown.Multi = v.Multi 
@@ -2126,14 +2171,14 @@ print("Adding Shop Items")
             ElementsCollection[Name][v.Title]:OnChanged(v.OnChange)
         elseif v.Mode == "TextBox" then 
             local BuildTextBox = {}
-            BuildTextBox.Title = v.Title
+            BuildTextBox.Title = T(v.Title)
             BuildTextBox.Callback = v.Callback
             BuildTextBox.Finished = v.Finished
             ElementsCollection[Name][v.Title]  = Tab:AddInput(v.Title,BuildTextBox)  
         end
     end
     for _,Name in pairs(UiOrders) do
-        TabCollections[Name] = Window:AddTab({ Title = Name, Icon = "" })
+        TabCollections[Name] = Window:AddTab({ Title = T(Name), Icon = "" })
         local Tab = TabCollections[Name]
         for i,v in pairs(UiIntilize[Name] or {}) do   
             if type(v)== 'function' then 
