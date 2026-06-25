@@ -346,19 +346,19 @@ local UiIntilize = {
     },
     ["Sub Farming"] = {
         {Mode="Label",Title="Disable All Stack + Main Farm Before Using"},
-        {Mode="Button",Title="Upgrade Yoru V2",Description="Only useable if you have yoru",Callback=function()
-            IslandCaller("YoruV2")
-        end},
-        {Mode="Toggle",Title="Yoru V3",Description="Auto Upgrade Yoru V3",Args = {"YoruV3","Enable"}},
-        {Mode="Dropdown",Title="Select Player",Description="Select Account to upgrade together",Table=IslandCaller("__StrGetPlayers"),OnChange=function (state)
-            getgenv().Setting["YoruV3"].SelectedPlayer = state
-        end},
-        {Mode="Button",Title="Refresh Players",Callback=function()
-            ElementsCollection["Sub Farming"]["Select Player"]:SetValues(IslandCaller("__StrGetPlayers"))
-        end},
+        --{Mode="Button",Title="Upgrade Yoru V2",Description="Only useable if you have yoru",Callback=function()
+            --IslandCaller("YoruV2")
+        --end},
+        --{Mode="Toggle",Title="Yoru V3",Description="Auto Upgrade Yoru V3",Args = {"YoruV3","Enable"}},
+        --{Mode="Dropdown",Title="Select Player",Description="Select Account to upgrade together",Table=IslandCaller("__StrGetPlayers"),OnChange=function (state)
+            --getgenv().Setting["YoruV3"].SelectedPlayer = state
+        --end},
+        --{Mode="Button",Title="Refresh Players",Callback=function()
+            --ElementsCollection["Sub Farming"]["Select Player"]:SetValues(IslandCaller("__StrGetPlayers"))
+        --end},
         
         
-        {Mode="Toggle",Title="Account To Upgrade Yoru V3",Description="Turn On This If This Is Account Want to Upgrade, do not if account to spawn Black Beard",Args = {"YoruV3","Upgrade"}},
+        --{Mode="Toggle",Title="Account To Upgrade Yoru V3",Description="Turn On This If This Is Account Want to Upgrade, do not if account to spawn Black Beard",Args = {"YoruV3","Upgrade"}},
         {Mode="Toggle",Title="Auto BlackSmith",Description="Self Explain",Args = {"BlackSmith","Enable"}},
         {Mode="Toggle",Title="Auto Shark Anchor",Description="Self Explain",Args = {"Shark Anchor","Enable"}},
         {Mode="Toggle",Title="BlackSmith Sword/Gun Toggle",Description="Off = Sword, On = Gun",Args = {"BlackSmith","WeaponType"}},
