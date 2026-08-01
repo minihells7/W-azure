@@ -551,10 +551,10 @@ local UiIntilize = {
     ["Status"] = {
         {Mode="Label",Title="Client Time"},
         {Mode="Label",Title="Farming Status"},
-        {Mode="Label",Title="Weapon Status [One Click]"},
+        --{Mode="Label",Title="Weapon Status [One Click]"},
         {Mode="Label",Title="Dimension Kill"},
         {Mode="Label",Title="Bribe Status"},
-        {Mode="Label",Title="Server Haki Color"},
+        --{Mode="Label",Title="Server Haki Color"},
         {Mode="Label",Title="Elite Status"},
         {Mode="Label",Title="Mirage Status"},
         {Mode="Label",Title="PrehistoricIsland Status"},
@@ -562,9 +562,9 @@ local UiIntilize = {
         {Mode="Label",Title="FullMoon Status"},
         {Mode="Label",Title="Eyes"},
     },
-    ["Player-Status"] = {
+    --[["Player-Status"] = {
         {Mode="Label",Title="W.I.P"}
-    },
+    },]]
     ["Fruit"] = {
         {
             Mode = "Toggle",
@@ -1039,7 +1039,7 @@ local UiIntilize = {
         },
     },
     ["Sea Events"] = {
-        {
+        --[[{
             Mode = "Button",
             Title = "Tp Your Ship To Current Pos",
             Callback = function()
@@ -1068,7 +1068,7 @@ local UiIntilize = {
             Callback = function()
                 IslandCaller("DarkAtmosphere")
             end
-        },
+        },]]
         {
             Mode = "Toggle",
             Title = "Ship Speed Modifier",
@@ -1371,7 +1371,7 @@ local UiIntilize = {
         }
     
     },
-    ["Sub Class"] = {
+    --[[["Sub Class"] = {
         {
             Mode = "Label",
             Title = "Status",
@@ -1392,7 +1392,7 @@ local UiIntilize = {
             Args = {"SubClass", "Shipwright"},
         },
 
-    },
+    },]]
     ["RaceV4-Mirage"] = {
         {
             Mode = "Button",
@@ -1929,7 +1929,7 @@ local UiIntilize = {
                 SettingManager:Save()
             end
         },
-        {
+        --[[{
             Mode = "Toggle",
             Title = "Remove Effect (Fluxus Only)",
             Description = "Disable And Rejoin To Get The Effect Back If You Want Effects",
@@ -1938,7 +1938,7 @@ local UiIntilize = {
                 getgenv().Setting.Misc.__RemoveEffects = state
                 SettingManager:Save()
             end
-        },
+        },]]
         {
             Mode = "Toggle",
             Title = "Disable 3D Render",
@@ -1957,7 +1957,7 @@ local UiIntilize = {
                 SettingManager:Save()
             end
         },
-        {
+        --[[{
             Mode = "Toggle",
             Title = "Disable DMG Counter",
             Args = {"Misc", "__RemoveDMGCounter"},
@@ -1965,7 +1965,7 @@ local UiIntilize = {
                 getgenv().Setting.Misc.__RemoveDMGCounter = state
                 SettingManager:Save()
             end
-        },
+        },]]
         {
             Mode = "Button",
             Title = "Server Hop",
@@ -2103,20 +2103,23 @@ print("Adding Shop Items")
     local BuildUI = function (Tab,i,v,Name)
 
         if v.Mode == "Toggle" then
-            local pointer = getgenv().Setting
             local args = v.Args
-            for i = 1, #args - 1 do
-                pointer = pointer[args[i]]
+            local function GetPointer()
+                local p = getgenv().Setting
+                for i = 1, #args - 1 do
+                    p = p[args[i]]
+                end
+                return p
             end
             local BuildToggle = {}
             BuildToggle.Title = T(v.Title)
-            BuildToggle.Default = pointer[args[#args]]
+            BuildToggle.Default = GetPointer()[args[#args]]
             if v.Description then
                 BuildToggle.Description = T(v.Description)
             end
             ElementsCollection[Name][v.Title] =  Tab:AddToggle(v.Title, BuildToggle)
             ElementsCollection[Name][v.Title]:OnChanged(function()
-                pointer[args[#args]] = UiSetting[v.Title].Value
+                GetPointer()[args[#args]] = UiSetting[v.Title].Value
                 if not v.NoSave then
                     SettingManager:Save()
                 end
