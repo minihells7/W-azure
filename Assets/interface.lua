@@ -68,7 +68,7 @@ local UiOrders
 if getgenv().OneClickUi then
     UiOrders = {"Status","Setting","Game-Server"}
 else
-     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Dojo","Prehistoric Island","Status","Player-Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Shop","Setting","Game-Server"}
+     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Dojo","Prehistoric Island","Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Shop","Setting","Game-Server"}
 end
 local TabCollections = {
 }
@@ -229,14 +229,59 @@ do
             game:GetService("VirtualInputManager"):SendKeyEvent(false,"LeftControl",false,game)
         end)
 end
+getgenv().Setting.FarmMode = getgenv().Setting.FarmMode or {}
+if getgenv().Setting.FarmMode.Selected == nil then
+    getgenv().Setting.FarmMode.Selected = "Auto Farm Level"
+end
+if getgenv().Setting.FarmMode.StartEnable == nil then
+    getgenv().Setting.FarmMode.StartEnable = false
+end
+
+local FarmModeMap = {
+    ["Auto Farm Level"] = {"Level","Enable"},
+    ["Auto Katakuri"] = {"Katakuri","Enable"},
+    ["Auto Bone"] = {"Bone","Enable"},
+    ["Auto Tyrant of the Skies"] = {"Tyrant Skies","Enable"},
+}
+
 local UiIntilize = {
     ["Main Farm"] = {
         {Mode="Label",Title="Only Turn On 1 Farm At The Same Time"},
-        {Mode="Toggle",Title="Auto Farm Level",Description="Self Explain",Args={"Level","Enable"}},
-        {Mode="Toggle",Title="Auto Katakuri",Description="Turn On Auto Kill Cake Prince And Auto Kill Dough King By Default",Args={"Katakuri","Enable"}},
-        
-        {Mode="Toggle",Title="Auto Bone",Description="",Args={"Bone","Enable"}},
-        
+        {
+            Mode = "Dropdown",
+            Title = "Farm Mode",
+            Description = "",
+            Table = {"Auto Farm Level", "Auto Katakuri", "Auto Bone", "Auto Tyrant of the Skies"},
+            Default = getgenv().Setting.FarmMode.Selected,
+            OnChange = function(value)
+                if getgenv().Setting.FarmMode.StartEnable then
+                    local OldArgs = FarmModeMap[getgenv().Setting.FarmMode.Selected]
+                    if OldArgs and getgenv().Setting[OldArgs[1]] then
+                        getgenv().Setting[OldArgs[1]][OldArgs[2]] = false
+                    end
+                end
+                getgenv().Setting.FarmMode.Selected = value
+                if getgenv().Setting.FarmMode.StartEnable then
+                    local NewArgs = FarmModeMap[value]
+                    if NewArgs and getgenv().Setting[NewArgs[1]] then
+                        getgenv().Setting[NewArgs[1]][NewArgs[2]] = true
+                    end
+                end
+                SettingManager:Save()
+            end
+        },
+        {
+            Mode = "Toggle",
+            Title = "Start Farm",
+            Description = "",
+            Args = {"FarmMode","StartEnable"},
+            OnChange = function(state)
+                local Args = FarmModeMap[getgenv().Setting.FarmMode.Selected]
+                if Args and getgenv().Setting[Args[1]] then
+                    getgenv().Setting[Args[1]][Args[2]] = state
+                end
+            end
+        },
         {Mode="Toggle",Title="Accept Quest",Description="For Bone And Katakuri, Have A Chance of Getting Reseted(Noone  yet)",Args={"AcceptQuest_Bone_Katakuri","Enable"}},
         {Mode="Toggle",Title="Kill Aura",Description="Farm Near Lv Mob Or Near Position",Args={"Kill Aura","Enable"}},
         {Mode="Toggle",Title="Fully Auto Dough King",Description="",Args={"Full Dough King","Enable"}},
@@ -301,9 +346,8 @@ local UiIntilize = {
     ["Stack Auto farm"] = {
         {Mode="Label",Title="Can Turn On Many Auto Farm Cuz Stackable"},
         {Mode="Toggle",Title="Auto Elite",Description="Sea 3 Function Only",Args={"Elite","Enable"}},
-        {Mode="Toggle",Title="Auto Tyrant of the Skies",Description="Sea 3 only",Args={"Tyrant Skies","Enable"}},
         {Mode="Toggle",Title="Auto Pirate Raid",Description="Sea 3 Function Only",Args={"Pirate Raid","Enable"}},
-        {Mode="Toggle",Title="Auto Open Haki Pad",Description="Sea 3 Function Only",Args={"Open Pad","Enable"}},
+        --{Mode="Toggle",Title="Auto Open Haki Pad",Description="Sea 3 Function Only",Args={"Open Pad","Enable"}},
         {Mode="Toggle",Title="Auto Spawn Rip Indra",Description="Sea 3 Function Only", Args = {"Spawn Rip Indra","Enable"}},
         {Mode="Toggle",Title="Auto Rip Indra",Description = "Only Kill Rip Indra, Doesnt Do Anything Else",Args={"Rip Indra","Enable"}},
         {Mode="Toggle",Title="Auto Tushita",Descrition="Sea 3 Function only",Args={"Tushita","Enable"}},
@@ -2120,6 +2164,9 @@ print("Adding Shop Items")
             ElementsCollection[Name][v.Title] =  Tab:AddToggle(v.Title, BuildToggle)
             ElementsCollection[Name][v.Title]:OnChanged(function()
                 GetPointer()[args[#args]] = UiSetting[v.Title].Value
+                if v.OnChange then
+                    v.OnChange(UiSetting[v.Title].Value)
+                end
                 if not v.NoSave then
                     SettingManager:Save()
                 end
