@@ -26,7 +26,7 @@ local HttpService = game:GetService("HttpService")
 
 local TranslationUrls = {
     ["th"] = "https://raw.githubusercontent.com/minihells7/W-azure/refs/heads/main/Translation/ThaiWAzure.json",
-    ["Viet"] = "https://raw.githubusercontent.com/minihells7/W-azure/refs/heads/main/Translation/VietnameseWAzure.json",
+    ["vi"] = "https://raw.githubusercontent.com/minihells7/W-azure/refs/heads/main/Translation/VietnameseWAzure.json",
 }
 
 local Translations = {}
