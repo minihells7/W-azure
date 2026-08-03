@@ -28,8 +28,6 @@ local TranslationUrls = {
     ["th"] = "https://raw.githubusercontent.com/minihells7/W-azure/refs/heads/main/Translation/ThaiWAzure.json",
 }
 
-local Translations = {}
-
 local function LoadTranslation()
     local ok, locale = pcall(function()
         return LocalizationService.RobloxLocaleId
