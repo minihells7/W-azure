@@ -26,6 +26,7 @@ local HttpService = game:GetService("HttpService")
 
 local TranslationUrls = {
     ["th"] = "https://raw.githubusercontent.com/minihells7/W-azure/refs/heads/main/Translation/ThaiWAzure.json",
+    ["Viet"] = "https://raw.githubusercontent.com/minihells7/W-azure/refs/heads/main/Translation/VietnameseWAzure.json",
 }
 
 local Translations = {}
@@ -42,7 +43,7 @@ local function LoadTranslation()
 
     local reqFn = request or http_request or (syn and syn.request) or (http and http.request)
     local success, result = pcall(function()
-        if not reqFn then error("nenhuma função de request disponível neste executor") end
+        if not reqFn then error("nilr") end
         local res = reqFn({Url = url, Method = "GET"})
         return res and res.Body
     end)
