@@ -34,22 +34,37 @@ local function LoadTranslation()
     local ok, locale = pcall(function()
         return LocalizationService.RobloxLocaleId
     end)
+    print("[T] locale ok:", ok, "locale:", locale)
     if not ok or not locale then return end
 
     local lang = string.lower(string.sub(locale, 1, 2))
+    print("[T] lang detectado:", lang)
     local url = TranslationUrls[lang]
-    if not url then return end
+    if not url then
+        print("[T] nenhuma URL de tradução pra esse lang")
+        return
+    end
 
     local success, result = pcall(function()
         return HttpService:GetAsync(url)
     end)
+    print("[T] http success:", success, "tamanho result:", result and #result or nil)
+    if not success then
+        print("[T] erro http:", result)
+    end
 
     if success and result then
         local parsed_ok, parsed = pcall(function()
             return HttpService:JSONDecode(result)
         end)
+        print("[T] json parse ok:", parsed_ok)
         if parsed_ok and parsed then
             Translations = parsed
+            local count = 0
+            for _ in pairs(Translations) do count = count + 1 end
+            print("[T] traduções carregadas:", count)
+        else
+            print("[T] erro json:", parsed)
         end
     end
 end
