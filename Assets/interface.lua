@@ -1,8 +1,8 @@
 repeat wait()
 until getgenv().LoadUi and getgenv().IslandCaller and getgenv().SettingManager and getgenv().Fluent
 local LP = game.Players.LocalPlayer
-local Title = "W-azure" .. (getgenv().Premium and " [Premium]" or "")
-local SubTitle = "True V2 discord.gg/w-azure"
+local Title = "Volt Hub" .. (getgenv().Premium and " [Premium]" or "")
+local SubTitle = ""
 local Fluent = getgenv().Fluent
 local UiSetting = Fluent.Options
 local IslandCaller = IslandCaller or getgenv().IslandCaller
