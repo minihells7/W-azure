@@ -1,52 +1,27 @@
 local ServerHopLibrary = {}
 
-local getgenv = getgenv or function()
-    return shared
-end
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 
-local function New(Name, Properties, Children)
-    local Object = Instance.new(Name)
+local LocalPlayer = Players.LocalPlayer
 
-    for Name, Value in next, Properties or {} do
-        if Name ~= "ThemeTag" and Name ~= "ImageThemeTag" then
-            Object[Name] = Value
-        end
+local Purple = Color3.fromRGB(174, 92, 255)
+local White = Color3.fromRGB(255, 255, 255)
+
+local function New(Class, Properties, Children)
+    local Object = Instance.new(Class)
+
+    for Property, Value in pairs(Properties or {}) do
+        Object[Property] = Value
     end
 
-    for _, Child in next, Children or {} do
+    for _, Child in ipairs(Children or {}) do
         Child.Parent = Object
     end
 
     return Object
 end
-
-local function Tween(obj, info, properties, callback)
-    local anim = game:GetService("TweenService"):Create(
-        obj,
-        TweenInfo.new(unpack(info)),
-        properties
-    )
-
-    anim:Play()
-
-    if callback then
-        anim.Completed:Connect(callback)
-    end
-
-    return anim
-end
-
-local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
-local LocalPlayer = game:GetService("Players").LocalPlayer
-
-local GUI = New("ScreenGui", {
-    Parent = RunService:IsStudio() and LocalPlayer.PlayerGui or game:GetService("CoreGui"),
-    IgnoreGuiInset = true,
-    ResetOnSpawn = false,
-    ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-    DisplayOrder = 999999
-})
 
 function ServerHopLibrary:CreateScreen(Config)
     assert(Config.Duration, "Duration is required!")
@@ -55,232 +30,249 @@ function ServerHopLibrary:CreateScreen(Config)
     local Timeout = Config.Duration
     local Screen = {}
 
-    local Theme = {
-        Background = Color3.fromRGB(8, 6, 14),
-        Panel = Color3.fromRGB(16, 11, 27),
-        Purple = Color3.fromRGB(157, 78, 255),
-        PurpleLight = Color3.fromRGB(190, 125, 255),
-        White = Color3.fromRGB(245, 242, 250),
-        Text = Color3.fromRGB(220, 214, 230),
-        Muted = Color3.fromRGB(143, 134, 158),
-        Stroke = Color3.fromRGB(63, 42, 84)
-    }
+    local Gui = New("ScreenGui", {
+        Name = "HopScreen",
+        Parent = game:GetService("CoreGui"),
+        IgnoreGuiInset = true,
+        ResetOnSpawn = false,
+        ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+        DisplayOrder = 999999
+    })
 
-    Screen.Background = New("Frame", {
-        Parent = GUI,
-        Position = UDim2.fromScale(0, 0),
+    local Overlay = New("Frame", {
+        Parent = Gui,
         Size = UDim2.fromScale(1, 1),
-        AnchorPoint = Vector2.new(0, 0),
-        BackgroundColor3 = Theme.Background,
-        BackgroundTransparency = 0.08,
-        BorderSizePixel = 0,
-        ZIndex = 1
+        Position = UDim2.fromScale(0, 0),
+        BackgroundColor3 = Color3.fromRGB(25, 13, 38),
+        BackgroundTransparency = 0.88,
+        BorderSizePixel = 0
     })
 
-    Screen.Glow = New("Frame", {
-        Parent = Screen.Background,
+    local Tint = New("Frame", {
+        Parent = Overlay,
+        Size = UDim2.fromScale(1, 1),
+        BackgroundColor3 = Color3.fromRGB(67, 27, 91),
+        BackgroundTransparency = 0.93,
+        BorderSizePixel = 0
+    })
+
+    local Center = New("Frame", {
+        Parent = Overlay,
         AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.fromScale(0.5, 0.45),
-        Size = UDim2.fromScale(0.7, 0.7),
-        BackgroundColor3 = Theme.Purple,
-        BackgroundTransparency = 0.94,
-        BorderSizePixel = 0,
-        ZIndex = 2
-    }, {
-        New("UICorner", {
-            CornerRadius = UDim.new(1, 0)
-        })
+        Position = UDim2.fromScale(0.5, 0.48),
+        Size = UDim2.new(0, 380, 0, 155),
+        BackgroundTransparency = 1
     })
 
-    Screen.Frame = New("CanvasGroup", {
-        Parent = Screen.Background,
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        Position = UDim2.fromScale(0.5, 0.5),
-        Size = UDim2.new(0, 510, 0, 300),
-        BackgroundColor3 = Theme.Panel,
-        BackgroundTransparency = 0.04,
-        GroupTransparency = 1,
-        BorderSizePixel = 0,
-        ZIndex = 10
-    }, {
-        New("UICorner", {
-            CornerRadius = UDim.new(0, 18)
-        }),
-
-        New("UIStroke", {
-            Color = Theme.Stroke,
-            Thickness = 1,
-            Transparency = 0.15
-        })
-    })
-
-    Screen.TopAccent = New("Frame", {
-        Parent = Screen.Frame,
+    Screen.Title = New("TextLabel", {
+        Parent = Center,
+        BackgroundTransparency = 1,
         AnchorPoint = Vector2.new(0.5, 0),
-        Position = UDim2.fromScale(0.5, 0),
-        Size = UDim2.new(1, -36, 0, 2),
-        BackgroundColor3 = Theme.Purple,
-        BorderSizePixel = 0,
-        ZIndex = 11
-    }, {
-        New("UICorner", {
-            CornerRadius = UDim.new(1, 0)
-        })
+        Position = UDim2.fromScale(0.5, 0.15),
+        Size = UDim2.new(1, 0, 0, 30),
+        Font = Enum.Font.GothamMedium,
+        Text = "Server Hop",
+        TextColor3 = White,
+        TextSize = 18,
+        TextXAlignment = Enum.TextXAlignment.Center
     })
 
-    Screen.Brand = New("TextLabel", {
-        Parent = Screen.Frame,
+    Screen.Counter = New("TextLabel", {
+        Parent = Center,
         BackgroundTransparency = 1,
-        Position = UDim2.new(0, 28, 0, 25),
-        Size = UDim2.new(1, -56, 0, 28),
+        AnchorPoint = Vector2.new(0.5, 0),
+        Position = UDim2.fromScale(0.5, 0.37),
+        Size = UDim2.new(1, 0, 0, 48),
         Font = Enum.Font.GothamBold,
-        Text = "W-Azure",
-        TextColor3 = Theme.PurpleLight,
-        TextSize = 20,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        ZIndex = 12
+        Text = string.format("%02d", Timeout),
+        TextColor3 = White,
+        TextSize = 42,
+        TextXAlignment = Enum.TextXAlignment.Center
     })
 
-    Screen.Status = New("TextLabel", {
-        Parent = Screen.Frame,
+    Screen.Info = New("TextLabel", {
+        Parent = Center,
         BackgroundTransparency = 1,
-        Position = UDim2.new(0, 28, 0, 52),
-        Size = UDim2.new(1, -56, 0, 20),
+        AnchorPoint = Vector2.new(0.5, 0),
+        Position = UDim2.fromScale(0.5, 0.70),
+        Size = UDim2.new(1, 0, 0, 18),
         Font = Enum.Font.Gotham,
-        Text = "SERVER TRANSITION",
-        TextColor3 = Theme.Muted,
-        TextSize = 10,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        ZIndex = 12
-    })
-
-    Screen.Dot = New("Frame", {
-        Parent = Screen.Frame,
-        AnchorPoint = Vector2.new(1, 0),
-        Position = UDim2.new(1, -28, 0, 32),
-        Size = UDim2.fromOffset(8, 8),
-        BackgroundColor3 = Theme.PurpleLight,
-        BorderSizePixel = 0,
-        ZIndex = 12
-    }, {
-        New("UICorner", {
-            CornerRadius = UDim.new(1, 0)
-        })
-    })
-
-    Screen.Divider = New("Frame", {
-        Parent = Screen.Frame,
-        Position = UDim2.new(0, 28, 0, 78),
-        Size = UDim2.new(1, -56, 0, 1),
-        BackgroundColor3 = Theme.Stroke,
-        BackgroundTransparency = 0.35,
-        BorderSizePixel = 0,
-        ZIndex = 11
-    })
-
-    Screen.HopText = New("TextLabel", {
-        Parent = Screen.Frame,
-        BackgroundTransparency = 1,
-        AnchorPoint = Vector2.new(0.5, 0),
-        Position = UDim2.fromScale(0.5, 0.33),
-        Size = UDim2.new(1, -50, 0, 38),
-        Font = Enum.Font.GothamBold,
-        Text = "Hopping Server in " .. Timeout .. "s...",
-        TextColor3 = Theme.White,
-        TextSize = 23,
-        TextWrapped = true,
-        TextXAlignment = Enum.TextXAlignment.Center,
-        ZIndex = 12
+        Text = "Changing server...",
+        TextColor3 = White,
+        TextSize = 11,
+        TextXAlignment = Enum.TextXAlignment.Center
     })
 
     Screen.Reason = New("TextLabel", {
-        Parent = Screen.Frame,
+        Parent = Center,
         BackgroundTransparency = 1,
         AnchorPoint = Vector2.new(0.5, 0),
-        Position = UDim2.fromScale(0.5, 0.49),
-        Size = UDim2.new(1, -70, 0, 25),
+        Position = UDim2.fromScale(0.5, 0.84),
+        Size = UDim2.new(1, 0, 0, 16),
         Font = Enum.Font.Gotham,
-        Text = "Reason: " .. Config.Reason,
-        TextColor3 = Theme.Text,
-        TextSize = 13,
-        TextWrapped = true,
-        TextXAlignment = Enum.TextXAlignment.Center,
-        ZIndex = 12
+        Text = "Reason: " .. tostring(Config.Reason),
+        TextColor3 = White,
+        TextSize = 9,
+        TextXAlignment = Enum.TextXAlignment.Center
     })
 
-    Screen.JobId = New("TextLabel", {
-        Parent = Screen.Frame,
-        BackgroundTransparency = 1,
-        AnchorPoint = Vector2.new(0.5, 0),
-        Position = UDim2.fromScale(0.5, 0.60),
-        Size = UDim2.new(1, -60, 0, 20),
-        Font = Enum.Font.Code,
-        Text = "JOB • " .. tostring(game.JobId or "00000000-0000-0000-0000-000000000000"),
-        TextColor3 = Theme.Muted,
-        TextSize = 10,
-        TextTransparency = 0.15,
-        TextXAlignment = Enum.TextXAlignment.Center,
-        ZIndex = 12
+    Screen.Progress = New("Frame", {
+        Parent = Overlay,
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        Position = UDim2.fromScale(0.5, 0.66),
+        Size = UDim2.new(0, 220, 0, 2),
+        BackgroundColor3 = Color3.fromRGB(110, 82, 125),
+        BackgroundTransparency = 0.55,
+        BorderSizePixel = 0
     })
 
-    Screen.ProgressBackground = New("Frame", {
-        Parent = Screen.Frame,
-        AnchorPoint = Vector2.new(0.5, 0),
-        Position = UDim2.fromScale(0.5, 0.73),
-        Size = UDim2.new(1, -70, 0, 7),
-        BackgroundColor3 = Color3.fromRGB(34, 25, 45),
-        BorderSizePixel = 0,
-        ZIndex = 12
-    }, {
-        New("UICorner", {
-            CornerRadius = UDim.new(1, 0)
-        })
-    })
-
-    Screen.InnerProgressBar = New("Frame", {
-        Parent = Screen.ProgressBackground,
+    Screen.Fill = New("Frame", {
+        Parent = Screen.Progress,
         Size = UDim2.new(1, 0, 1, 0),
-        BackgroundColor3 = Theme.Purple,
-        BorderSizePixel = 0,
-        ZIndex = 13
-    }, {
-        New("UICorner", {
-            CornerRadius = UDim.new(1, 0)
-        })
+        BackgroundColor3 = Purple,
+        BorderSizePixel = 0
     })
 
-    Screen.BottomText = New("TextLabel", {
-        Parent = Screen.Frame,
+    Screen.Cancel = New("TextLabel", {
+        Parent = Overlay,
+        AnchorPoint = Vector2.new(0.5, 1),
+        Position = UDim2.fromScale(0.5, 0.96),
+        Size = UDim2.new(0, 300, 0, 22),
         BackgroundTransparency = 1,
-        AnchorPoint = Vector2.new(0.5, 0),
-        Position = UDim2.fromScale(0.5, 0.82),
-        Size = UDim2.new(1, -50, 0, 25),
         Font = Enum.Font.Gotham,
-        Text = "Double click anywhere to abort",
-        TextColor3 = Theme.Muted,
-        TextSize = 11,
-        TextXAlignment = Enum.TextXAlignment.Center,
-        ZIndex = 12
+        Text = "Double click anywhere to cancel",
+        TextColor3 = White,
+        TextSize = 10,
+        TextTransparency = 0,
+        TextXAlignment = Enum.TextXAlignment.Center
     })
+
+    Screen.Job = New("TextLabel", {
+        Parent = Overlay,
+        AnchorPoint = Vector2.new(0.5, 0),
+        Position = UDim2.fromScale(0.5, 0.035),
+        Size = UDim2.new(0, 500, 0, 18),
+        BackgroundTransparency = 1,
+        Font = Enum.Font.Code,
+        Text = "JOB ID  " .. tostring(game.JobId or "00000000"),
+        TextColor3 = White,
+        TextSize = 9,
+        TextTransparency = 0,
+        TextXAlignment = Enum.TextXAlignment.Center
+    })
+
+    local Scale = New("UIScale", {
+        Parent = Center,
+        Scale = 1
+    })
+
+    local Camera = workspace.CurrentCamera
+
+    local function UpdateScale()
+        if not Camera then
+            return
+        end
+
+        local Viewport = Camera.ViewportSize
+
+        Scale.Scale = math.clamp(
+            math.min(Viewport.X / 700, Viewport.Y / 500),
+            0.78,
+            1.15
+        )
+    end
+
+    UpdateScale()
+
+    if Camera then
+        Camera:GetPropertyChangedSignal("ViewportSize"):Connect(UpdateScale)
+    end
 
     local Aborted = false
     local LastClickTime = 0
     local DoubleClickTime = 0.25
 
-    Screen.Frame.InputBegan:Connect(function(Input)
-        if
-            Input.UserInputType == Enum.UserInputType.MouseButton1
-            or Input.UserInputType == Enum.UserInputType.Touch
-        then
-            local CurrentClickTime = RunService.Stepped:Wait()
+    local function Abort()
+        if Aborted then
+            return
+        end
 
-            if (CurrentClickTime - LastClickTime) < DoubleClickTime then
-                Aborted = true
+        Aborted = true
+
+        Screen.Info.Text = "Server hop cancelled"
+        Screen.Info.TextColor3 = Purple
+
+        Screen.Reason.Text = "The operation has been stopped"
+        Screen.Reason.TextColor3 = White
+
+        TweenService:Create(
+            Screen.Counter,
+            TweenInfo.new(
+                0.2,
+                Enum.EasingStyle.Quad,
+                Enum.EasingDirection.Out
+            ),
+            {
+                TextColor3 = Purple
+            }
+        ):Play()
+
+        TweenService:Create(
+            Screen.Fill,
+            TweenInfo.new(
+                0.3,
+                Enum.EasingStyle.Quad,
+                Enum.EasingDirection.Out
+            ),
+            {
+                Size = UDim2.fromScale(1, 1)
+            }
+        ):Play()
+    end
+
+    local InputConnection
+
+    InputConnection = UserInputService.InputBegan:Connect(function(Input, Processed)
+        if Processed or Aborted then
+            return
+        end
+
+        if Input.UserInputType == Enum.UserInputType.MouseButton1
+            or Input.UserInputType == Enum.UserInputType.Touch then
+
+            local CurrentClickTime = tick()
+
+            if CurrentClickTime - LastClickTime < DoubleClickTime then
+                Abort()
             end
 
             LastClickTime = CurrentClickTime
         end
     end)
+
+    TweenService:Create(
+        Overlay,
+        TweenInfo.new(
+            0.45,
+            Enum.EasingStyle.Quad,
+            Enum.EasingDirection.Out
+        ),
+        {
+            BackgroundTransparency = 0.91
+        }
+    ):Play()
+
+    TweenService:Create(
+        Center,
+        TweenInfo.new(
+            0.45,
+            Enum.EasingStyle.Quint,
+            Enum.EasingDirection.Out
+        ),
+        {
+            Position = UDim2.fromScale(0.5, 0.46)
+        }
+    ):Play()
 
     local Finish = false
     local Status = "None"
@@ -288,58 +280,78 @@ function ServerHopLibrary:CreateScreen(Config)
     task.spawn(function()
         while true do
             if Aborted then
-                Screen.HopText.Text = "Server Hop Aborted"
-                Screen.HopText.TextColor3 = Theme.PurpleLight
-                Screen.BottomText.Text = "Function will be delayed for 15 seconds"
-
-                Tween(
-                    Screen.InnerProgressBar,
-                    {0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut},
-                    {Size = UDim2.new(1, 0, 1, 0)}
-                )
+                Screen.Info.Text = "Server hop aborted"
+                Screen.Reason.Text = "Function will be delayed for 15 seconds"
 
                 task.delay(1, function()
-                    local Timeout = 10
+                    local DeleteTimeout = 10
 
                     while task.wait(1) do
-                        if Timeout <= 0 then
-                            Screen.JobId.Visible = false
-                            Screen.ProgressBackground.Visible = false
-                            Screen.BottomText.Visible = false
-                            Screen.Reason.Visible = false
-                            Screen.Status.Visible = false
-                            Screen.Dot.Visible = false
-
+                        if DeleteTimeout <= 0 then
                             Finish = true
                             Status = "Abort"
 
-                            Tween(
-                                Screen.Frame,
-                                {0.35, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut},
-                                {GroupTransparency = 1},
-                                function()
-                                    Screen.Background:Destroy()
+                            if InputConnection then
+                                InputConnection:Disconnect()
+                            end
+
+                            TweenService:Create(
+                                Overlay,
+                                TweenInfo.new(
+                                    0.35,
+                                    Enum.EasingStyle.Exponential,
+                                    Enum.EasingDirection.InOut
+                                ),
+                                {
+                                    BackgroundTransparency = 1
+                                }
+                            ):Play()
+
+                            TweenService:Create(
+                                Center,
+                                TweenInfo.new(
+                                    0.35,
+                                    Enum.EasingStyle.Exponential,
+                                    Enum.EasingDirection.InOut
+                                ),
+                                {
+                                    Position = UDim2.fromScale(0.5, 0.52)
+                                }
+                            ):Play()
+
+                            task.delay(0.4, function()
+                                if Gui then
+                                    Gui:Destroy()
                                 end
-                            )
+                            end)
 
                             break
                         end
 
-                        Timeout -= 1
-                        Screen.HopText.Text = "Deleting UI in " .. Timeout .. "s"
+                        DeleteTimeout -= 1
 
-                        Tween(
-                            Screen.InnerProgressBar,
-                            {0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut},
+                        Screen.Counter.Text =
+                            string.format("%02d", DeleteTimeout)
+
+                        Screen.Info.Text =
+                            "Deleting UI..."
+
+                        TweenService:Create(
+                            Screen.Fill,
+                            TweenInfo.new(
+                                0.2,
+                                Enum.EasingStyle.Sine,
+                                Enum.EasingDirection.InOut
+                            ),
                             {
                                 Size = UDim2.new(
-                                    math.clamp(Timeout / 10, 0, 1),
+                                    math.clamp(DeleteTimeout / 10, 0, 1),
                                     0,
                                     1,
                                     0
                                 )
                             }
-                        )
+                        ):Play()
                     end
                 end)
 
@@ -348,42 +360,43 @@ function ServerHopLibrary:CreateScreen(Config)
 
             Timeout -= 1
 
-            Screen.HopText.Text =
-                "Hopping Server in " .. Timeout .. "s..."
+            Screen.Counter.Text =
+                string.format("%02d", math.max(Timeout, 0))
 
-            Tween(
-                Screen.InnerProgressBar,
-                {0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut},
+            Screen.Info.Text =
+                "Changing server..."
+
+            TweenService:Create(
+                Screen.Fill,
+                TweenInfo.new(
+                    0.2,
+                    Enum.EasingStyle.Sine,
+                    Enum.EasingDirection.InOut
+                ),
                 {
                     Size = UDim2.new(
-                        math.clamp(Timeout / 10, 0, 1),
+                        math.clamp(Timeout / Config.Duration, 0, 1),
                         0,
                         1,
                         0
                     )
                 }
-            )
+            ):Play()
 
             if Timeout <= 0 then
                 Finish = true
                 Status = "Success"
+
+                if InputConnection then
+                    InputConnection:Disconnect()
+                end
+
                 break
             end
 
             task.wait(1)
         end
     end)
-
-    Screen.Frame.Position = UDim2.fromScale(0.5, 0.53)
-
-    Tween(
-        Screen.Frame,
-        {0.45, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out},
-        {
-            Position = UDim2.fromScale(0.5, 0.5),
-            GroupTransparency = 0
-        }
-    )
 
     repeat
         task.wait()
