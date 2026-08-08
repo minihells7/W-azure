@@ -72,7 +72,7 @@ local UiOrders
 if getgenv().OneClickUi then
     UiOrders = {"Status","Setting","Game-Server"}
 else
-     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Dojo","Prehistoric Island","Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Shop","Setting","Game-Server"}
+     UiOrders = {"Farm Main","Stack Farm","Sub Farming","Dojo Quest","Prehistoric Island","Status","Fruit","Local Player","Travel","PvP","Raid","Miragem-V4","Sea Events","Shop","Setting","Game-Server"}
 end
 local TabCollections = {
 }
@@ -250,8 +250,8 @@ local FarmModeMap = {
 }
 
 local UiIntilize = {
-    ["Main Farm"] = {
-        {Mode="Label",Title="Only Turn On 1 Farm At The Same Time"},
+    ["Farm Main"] = {
+        {Mode="Section",Title="Farm Main:"},
         {
             Mode = "Dropdown",
             Title = "Farm Mode",
@@ -289,31 +289,27 @@ local UiIntilize = {
         },
         {Mode="Toggle",Title="Accept Quest",Description="For Bone And Katakuri, Have A Chance of Getting Reseted(Noone  yet)",Args={"AcceptQuest_Bone_Katakuri","Enable"}},
         {Mode="Toggle",Title="Kill Aura",Description="Farm Near Lv Mob Or Near Position",Args={"Kill Aura","Enable"}},
-        {Mode="Toggle",Title="Fully Auto Dough King",Description="",Args={"Full Dough King","Enable"}},
-        {Mode="Label",Title="Setting For Auto Farm"},
-        {Mode="Label",Title="Anchor Position"},
-        {Mode="Toggle",Title="TP Back Anchor Position",Description="If Exceed Anchor Position Will Tp Back To Anchor Position",Args={"Kill Aura","AnchorTPBack"}},
-        {Mode="Button",Title="Set Anchor Position",Callback=function ()
-            pcall(function ()
-                getgenv().Setting["Kill Aura"].AnchorPosition = tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
-            end)
-        end},
-        {Mode="Dropdown",Title="Distace From Anchor",Table = (function ()
-            local Table = {}
-            for i=400,4000,400 do 
-                table.insert(Table,i)
+        {Mode="Section",Title="Material:"},
+        {
+            Mode = "Toggle",
+            Title = "Start Farming Material",
+            Args = {"Material","Enable"},
+            Callback = function (state)
+                getgenv().Setting.Material.Enable = state
+                SettingManager:Save()
             end
-            return Table
-        end)(),Default=getgenv().Setting["Kill Aura"].DistanceFromAnchor/400,OnChange=function (state)
-            getgenv().Setting["Kill Aura"].DistanceFromAnchor = state
+        },
+        {Mode="Dropdown",Title="Materials",Table=(getgenv().IslandVariable and getgenv().IslandVariable.MaterialName) or {},OnChange=function (state)
+            getgenv().Setting.Material.Select = state
+            SettingManager:Save()        
         end},
+        {Mode="Section",Title="Mastery:"},
         {Mode="Toggle",Title="Use Sword",Args = {"Mastery","Sword"}},
         {Mode="Toggle",Title="Sword Switcher",Description="Switch Sword When Have Enough Skills (Default) or Max Mastery",Args={"SwordSwitcher","Enable"}},
         {Mode="Toggle",Title="Only Switch Max Mastery",Description="Only Switch When Max Mastery",Args={"SwordSwitcher","MaxMastery"}},
         {Mode="Toggle",Title="Switch Sword When Low", Description = "Must Enable Use Sword", Args={"Mastery","Sword/Low"}},
         {Mode="Toggle",Title="Gun Switcher",Description="Switch Gun When Have Enough Skills (Default) or Max Mastery",Args={"GunSwitcher","Enable"}},
         {Mode="Toggle",Title="Only Switch Max Mastery",Description="Only Switch Gun When Max Mastery",Args={"GunSwitcher","MaxMastery"}},
-        {Mode="Label",Title="Go To Setting To Select Skills"},
         {Mode="Toggle",Title="Mastery Farm",Description="Need Enable Auto Katakuri Or Bone", Args={"Mastery","Enable"}},
         {Mode="Toggle",Title ="Aimbot Camera " ,Description = "Aimbot for Mastery Using Camera", Args={"Mastery","Camera"}},
         {
@@ -341,6 +337,7 @@ local UiIntilize = {
             Mode = "Toggle",
             Title = "Disable Silent Aim",
             Args = {"Pvp", "DisableSilentAim"},
+            Hidden = true,
             OnChange = function(state)
                 getgenv().Setting.Pvp.DisableSilentAim = state
                 SettingManager:Save()
@@ -348,8 +345,8 @@ local UiIntilize = {
         },
         {Mode="Button",Title="Fps Boost",Callback = getgenv().LiteFpsBoost}
     },
-    ["Stack Auto farm"] = {
-        {Mode="Label",Title="Can Turn On Many Auto Farm Cuz Stackable"},
+    ["Stack Farm"] = {
+        {Mode="Section",Title="Stack Farm:"},
         {Mode="Toggle",Title="Auto Elite",Description="Sea 3 Function Only",Args={"Elite","Enable"}},
         {Mode="Toggle",Title="Auto Pirate Raid",Description="Sea 3 Function Only",Args={"Pirate Raid","Enable"}},
         --{Mode="Toggle",Title="Auto Open Haki Pad",Description="Sea 3 Function Only",Args={"Open Pad","Enable"}},
@@ -390,11 +387,27 @@ local UiIntilize = {
         {Mode="Toggle",Title="Auto Soul Guitar",Args = {"Soul Guitar","Enable"}},
         {Mode="Toggle",Title="Auto Soul Guitar Material",Args = {"Material Soul Guitar","Enable"}},
         {Mode="Toggle",Title="Auto CDK",Args = {"CDK","Enable"}},
-        
+        {Mode="Toggle",Title="Fully Auto Dough King",Description="",Args={"Full Dough King","Enable"}},
+        {
+            Mode = "Toggle",
+            Title = "Auto Collect Berry",
+            Args = {"CollectBerry", "Enable"},
+            OnChange = function(state)
+                getgenv().Setting.CollectBerry.Enable = state
+            end
+        },
+        {
+            Mode = "Toggle",
+            Title = "Auto Berry Hop",
+            Args = {"CollectBerry", "Hop"},
+            OnChange = function(state)
+                getgenv().Setting.CollectBerry.Hop = state
+            end
+        },
         --{Mode="Toggle",Title="Auto Collect Gift", Description="Sea 3 Function Event",Args = {"Winter Event","Enable"}}
     },
     ["Sub Farming"] = {
-        {Mode="Label",Title="Disable All Stack + Main Farm Before Using"},
+        {Mode="Section",Title="Sub Farming:"},
         --{Mode="Button",Title="Upgrade Yoru V2",Description="Only useable if you have yoru",Callback=function()
             --IslandCaller("YoruV2")
         --end},
@@ -416,12 +429,12 @@ local UiIntilize = {
         {Mode="Toggle",Title="Auto Elite Hop",Description="",Args = {"Elite Hop","Enable"}},
         {Mode="Toggle",Title="Black Beard Hop",Description="Auto Hop For Black Beard",Args={"Black Beard Hop","Enable"}},
         {Mode="Toggle",Title="Tushita Hop (Need All Haki Colors)",Description="Auto Chest + Auto Elite Till Find Cup And Spawn Then Get Tushita",Args={"Tushita Hop__1","Enable"}},
-        {Mode="Toggle",Title="Hybrid Fruit Hop",Description="Pirate Raid + Collect Fruit Hop",Args={"Hybrid Fruit Hop","Enable"}},
         {Mode="Toggle",Title="Raid Fruit Hop",Description="Pirate Raid + Collect Fruit + Raid Hop" ,Args={"Raid Fruit Hop","Enable"}},
         {Mode="Toggle",Title="Auto Law",Description="Auto Farm Law",Args={"Law","Enable"}},
         {Mode="Toggle",Title="Auto Cyborg [Premium]",Description="Auto Chest For Fist Then Auto Law",Args={"Fully Cyborg","Enable"}},
         {Mode="Toggle",Title="Auto Ghoul Hop",Description="Auto Find Torch + Ghoul (Very Rare, Dont Recommend)",Args={"Fully Ghoul","Enable"}},
         {Mode="Toggle",Title="Boss Snipe Hop",Description="",Args={"BossSniper","Hop"}},
+        {Mode="Section",Title="Chest:"},
         {Mode="Label",Title="Chest Count"},
         {Mode="Toggle",Title="Auto Chest",Description="Stop On God Chalice And Fist Of Darkness By Default",Args={"Collect Chest","Enable"}},
         {Mode="Toggle",Title="Ignore Items - Chest",Description="Enable This To Not Stop On Getting Fist of Darkness Or God Chalice",Args={"Collect Chest","IgnoreItem"}},
@@ -460,7 +473,8 @@ local UiIntilize = {
         {Mode="Toggle",Title="Auto Get Rainbow Haki",Description="",Args = {"Rainbow Haki","Enable"}},
         {Mode="Toggle",Title="Rainbow Haki Hop",Description="Hopping For Fast Getting Rainbow Haki",Args = {"Rainbow Haki","Hop"}},
     },
-    ["Dojo"] = {
+    ["Dojo Quest"] = {
+        {Mode="Section",Title="Dojo Quest:"},
         {
             Mode = "Toggle",
             Title = "Auto Dojo Trainer",
@@ -477,7 +491,7 @@ local UiIntilize = {
                 getgenv().Setting.DragonHunterQuest.Enable = state
             end
         },
-        {Mode = "Label", Title = "Trial"},
+        {Mode = "Section", Title = "Trial:"},
         {
             Mode = "Toggle",
             Title = "Auto Trial Draco",
@@ -514,6 +528,7 @@ local UiIntilize = {
         },
     },
     ["Prehistoric Island"] = {
+        {Mode="Section",Title="Prehistoric Island:"},
         {
             Mode = "Toggle",
             Title = "Auto Find PrehistoricIsland",
@@ -598,6 +613,7 @@ local UiIntilize = {
         },
     },
     ["Status"] = {
+        {Mode="Section",Title="Status:"},
         {Mode="Label",Title="Client Time"},
         {Mode="Label",Title="Farming Status"},
         --{Mode="Label",Title="Weapon Status [One Click]"},
@@ -615,6 +631,7 @@ local UiIntilize = {
         {Mode="Label",Title="W.I.P"}
     },]]
     ["Fruit"] = {
+        {Mode="Section",Title="Fruit:"},
         {
             Mode = "Toggle",
             Title = "Auto Collect Fruit",
@@ -632,22 +649,7 @@ local UiIntilize = {
                 getgenv().Setting.Fruit.AutoStore = state
             end
         },
-        {
-            Mode = "Toggle",
-            Title = "Auto Collect Berry",
-            Args = {"CollectBerry", "Enable"},
-            OnChange = function(state)
-                getgenv().Setting.CollectBerry.Enable = state
-            end
-        },
-        {
-            Mode = "Toggle",
-            Title = "Auto Berry Hop",
-            Args = {"CollectBerry", "Hop"},
-            OnChange = function(state)
-                getgenv().Setting.CollectBerry.Hop = state
-            end
-        },
+        {Mode="Toggle",Title="Hybrid Fruit Hop",Description="Pirate Raid + Collect Fruit Hop",Args={"Hybrid Fruit Hop","Enable"}},
         {
             Mode = "Toggle",
             Title = "Snipe Fruit",
@@ -688,7 +690,7 @@ local UiIntilize = {
         }
     },
     ["Local Player"] = {
-
+        {Mode="Section",Title="Local Player:"},
         {Mode="Button",Title="Change Team To Pirates",Description="Team Changer",Callback=function()
             game:GetService("ReplicatedStorage").Remotes["CommF_"]:InvokeServer("SetTeam","Pirates")
 
@@ -859,6 +861,7 @@ local UiIntilize = {
         }
     },
     ["Travel"] = {
+        {Mode="Section",Title="Travel:"},
         {Mode="Button",Title="Stop Tween",Callback=function() IslandCaller("StopTween") end},
         {Mode="Button",Title="Travel Sea 1",Callback=function ()
             IslandCaller("Travel","Sea1")
@@ -891,12 +894,13 @@ local UiIntilize = {
 
         
     },
-    ["Pvp-Visual"] = {
+    ["PvP"] = {
+        {Mode="Section",Title="PvP:"},
         {Mode="Dropdown",Title="Select Player",Table=IslandCaller("__StrGetPlayers"),OnChange=function (state)
             SelectedPlayer = state
         end},
         {Mode="Button",Title="Refresh Players",Callback=function()
-            ElementsCollection["Pvp-Visual"]["Select Player"]:SetValues(IslandCaller("__StrGetPlayers"))
+            ElementsCollection["PvP"]["Select Player"]:SetValues(IslandCaller("__StrGetPlayers"))
         end},
         {
             Mode = "Toggle",
@@ -999,24 +1003,8 @@ local UiIntilize = {
             end
         }
     },
-    ["Raid-Material"] = {
-        {
-            Mode = "Label",
-            Title = "Selected Material",
-        },
-        {
-            Mode = "Toggle",
-            Title = "Start Farming Material",
-            Args = {"Material","Enable"},
-            Callback = function (state)
-                getgenv().Setting.Material.Enable = state
-                SettingManager:Save()
-            end
-        },
-        {Mode="Dropdown",Title="Materials",Table=(getgenv().IslandVariable and getgenv().IslandVariable.MaterialName) or {},OnChange=function (state)
-            getgenv().Setting.Material.Select = state
-            SettingManager:Save()        
-        end},
+    ["Raid"] = {
+        {Mode="Section",Title="Raid:"},
         {
             Mode = "Label",
             Title = "Selected Chip",
@@ -1072,10 +1060,7 @@ local UiIntilize = {
                 SettingManager:Save()
             end
         },
-        {
-            Mode = "Label",
-            Title = "Dungeon",
-        },
+        {Mode="Section",Title="Dungeon:"},
         {
             Mode = "Toggle",
             Title = "Auto Dungeon",
@@ -1088,6 +1073,7 @@ local UiIntilize = {
         },
     },
     ["Sea Events"] = {
+        {Mode="Section",Title="Sea Events:"},
         --[[{
             Mode = "Button",
             Title = "Tp Your Ship To Current Pos",
@@ -1256,10 +1242,7 @@ local UiIntilize = {
                 SettingManager:Save()
             end
         },
-        {
-            Mode = "Label",
-            Title = "Leviathan Section"
-        },
+        {Mode="Section",Title="Leviathan:"},
         {
             Mode = "Button",
             Title = "Tp To Frozen island",
@@ -1299,10 +1282,7 @@ local UiIntilize = {
                 SettingManager:Save()
             end
         },
-        {
-            Mode = "Label",
-            Title = "Kitsune Section"
-        },
+        {Mode="Section",Title="Kitsune:"},
         {
             Mode = "Button",
             Title = "Tween To Kitsune Island",
@@ -1368,10 +1348,7 @@ local UiIntilize = {
                 SettingManager:Save()
             end
         },
-        {
-            Mode = "Label",
-            Title = "Sea Events Setting"
-        },
+        {Mode="Section",Title="Sea Events Setting:"},
         {
             Mode = "Toggle",
             Title = "Spin Ship If Farming",
@@ -1442,7 +1419,8 @@ local UiIntilize = {
         },
 
     },]]
-    ["RaceV4-Mirage"] = {
+    ["Miragem-V4"] = {
+        {Mode="Section",Title="Miragem-V4:"},
         {
             Mode = "Button",
             Title = "TP To Gear",
@@ -1499,8 +1477,8 @@ local UiIntilize = {
             SettingManager:Save()
         end},
         {Mode="Button",Title="Refresh Players",Callback=function()
-            ElementsCollection["RaceV4-Mirage"]["Team Trial Player 1"]:SetValues(IslandCaller("__StrGetPlayers"))
-            ElementsCollection["RaceV4-Mirage"]["Team Trial Player 2"]:SetValues(IslandCaller("__StrGetPlayers"))
+            ElementsCollection["Miragem-V4"]["Team Trial Player 1"]:SetValues(IslandCaller("__StrGetPlayers"))
+            ElementsCollection["Miragem-V4"]["Team Trial Player 2"]:SetValues(IslandCaller("__StrGetPlayers"))
         end},
         {
             Mode = "Toggle",
@@ -1626,6 +1604,7 @@ local UiIntilize = {
         },
     },
     ["Shop"] = {
+        {Mode="Section",Title="Shop:"},
         {
             Mode = "Toggle",
             Title = "Auto Buy Bribe",
@@ -1714,10 +1693,25 @@ local UiIntilize = {
         }
     },
     ["Setting"] = {
-        {
-            Mode = "Label",
-            Title = "Tween Section"
-        },
+        {Mode="Section",Title="Setting:"},
+        {Mode="Section",Title="Anchor Position:"},
+        {Mode="Label",Title="Anchor Position"},
+        {Mode="Toggle",Title="TP Back Anchor Position",Description="If Exceed Anchor Position Will Tp Back To Anchor Position",Args={"Kill Aura","AnchorTPBack"}},
+        {Mode="Button",Title="Set Anchor Position",Callback=function ()
+            pcall(function ()
+                getgenv().Setting["Kill Aura"].AnchorPosition = tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+            end)
+        end},
+        {Mode="Dropdown",Title="Distace From Anchor",Table = (function ()
+            local Table = {}
+            for i=400,4000,400 do 
+                table.insert(Table,i)
+            end
+            return Table
+        end)(),Default=getgenv().Setting["Kill Aura"].DistanceFromAnchor/400,OnChange=function (state)
+            getgenv().Setting["Kill Aura"].DistanceFromAnchor = state
+        end},
+        {Mode="Section",Title="Tween:"},
         {
             Mode = "Dropdown",
             Title = "Tween Speed",
@@ -1748,10 +1742,7 @@ local UiIntilize = {
                 SettingManager:Save()
             end
         },
-        {
-            Mode = "Label",
-            Title = "Bring Mob Section"
-        },
+        {Mode="Section",Title="Bring Mob:"},
         {
             Mode = "Toggle",
             Title = "Bring Mob",
@@ -1774,10 +1765,7 @@ local UiIntilize = {
                 SettingManager:Save()
             end
         },
-        {
-            Mode = "Label",
-            Title = "Fast Attack Section"
-        },
+        {Mode="Section",Title="Fast Attack:"},
         {
             Mode = "Toggle",
             Title = "Fast Attack",
@@ -1809,11 +1797,7 @@ local UiIntilize = {
             end
         },
 
-        {
-            Mode = "Label",
-            Title = "Mastery Position",
-
-        },
+        {Mode="Section",Title="Mastery Position:"},
         function ()
             local MultiBuild = {}
             local Pos = {"X","Y","Z"}
@@ -1861,10 +1845,7 @@ local UiIntilize = {
                 SettingManager:Save()
             end
         },
-        {
-            Mode = "Label",
-            Title = "Fruit Skills Setting"
-        },
+        {Mode="Section",Title="Fruit Skills:"},
         {
             Mode = "Toggle",
             Title = "Use Dragonstorm",
@@ -1943,6 +1924,7 @@ local UiIntilize = {
         },
     },
     ["Game-Server"] = {
+        {Mode="Section",Title="Game-Server:"},
         {
             Mode = "TextBox",
             Title = "Job Id",
@@ -2132,7 +2114,7 @@ print("Adding Shop Items")
     for _,v in pairs((getgenv().IslandVariable and getgenv().IslandVariable.Items) or {}) do 
         for i,t in pairs(v) do
             table.insert(UiIntilize["Shop"],{
-                Mode = "Label",
+                Mode = "Section",
                 Title = i .. " Section",
             })
             local AllMelees = {}
@@ -2176,6 +2158,8 @@ print("Adding Shop Items")
                     SettingManager:Save()
                 end
             end)
+        elseif v.Mode == "Section" then
+            ElementsCollection[Name][v.Title] = Tab:AddSection(T(v.Title))
         elseif v.Mode == "Label" then 
             local BuildLabel = {}
             BuildLabel.Title = T(v.Title)
@@ -2230,6 +2214,15 @@ print("Adding Shop Items")
             BuildTextBox.Callback = v.Callback
             BuildTextBox.Finished = v.Finished
             ElementsCollection[Name][v.Title]  = Tab:AddInput(v.Title,BuildTextBox)  
+        end
+        if v.Hidden and ElementsCollection[Name][v.Title] then
+            pcall(function()
+                local Element = ElementsCollection[Name][v.Title]
+                local Instance = Element.Instance or Element.Container or Element.Frame
+                if Instance then
+                    Instance.Visible = false
+                end
+            end)
         end
     end
     for _,Name in pairs(UiOrders) do
