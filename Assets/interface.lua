@@ -166,69 +166,70 @@ do
     	end)
     end
     local ScreenGui = utils.create('ScreenGui', {
+        Name = "VoltToggle",
         Parent = game.CoreGui,
         IgnoreGuiInset = true,
         ResetOnSpawn = false,
         DisplayOrder = 100,
         ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     })
-        local ToggleWindow = utils.create('Frame', {
-            Name = "ToggleWindow",
-            Parent = ScreenGui,
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            BackgroundColor3 = Color3.fromRGB(0,0,0),
-            BorderColor3 = Color3.fromRGB(0, 0, 0),
-            BorderSizePixel = 0,
-            Position = UDim2.new(0.0284789652, 0, 0.054862842, 0),
-            Size = UDim2.new(0.0384789652, 0, 0.054862842, 0),
-        })
 
-        utils.create('UIAspectRatioConstraint', {
-            Parent = ToggleWindow,
-            AspectRatio = 1.011
+        local ToggleWindow = utils.create('ImageButton', {
+            Parent = ScreenGui,
+            Size = UDim2.fromOffset(46, 46),
+            Position = UDim2.new(0, 20, 0, 20),
+            BackgroundTransparency = 1,
+            Image = "rbxassetid://94741990242507",
+            ScaleType = Enum.ScaleType.Fit,
+            AutoButtonColor = false,
+            ImageTransparency = 0,
         })
 
         utils.create('UICorner', {
-            CornerRadius = UDim.new(0, 4000),
+            CornerRadius = UDim.new(1, 0),
             Parent = ToggleWindow,
         })
 
-        local ToggleWindowIcon = utils.create('ImageLabel', {
-            Name = "ToggleWindowIcon",
-            Parent = ToggleWindow,
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-            BackgroundTransparency = 1.000,
-            BorderColor3 = Color3.fromRGB(0, 0, 0),
-            BorderSizePixel = 0,
-            Position = UDim2.new(0.5, 0, 0.5, 0),
-            Size = UDim2.new(0.681818187, 0, 0.681818187, 0),
-            Image = "http://www.roblox.com/asset/?id=13286125855",
-            ImageColor3 = Color3.fromRGB(107, 218, 255),
-        })
+        local dragging, dragInput, dragStart, startPos
 
-        local ToggleWindowStroke = utils.create('UIStroke', {
-            Color = Color3.fromRGB(107, 218, 255),
-            Thickness = 1.600,
-            Parent = ToggleWindow,
-        })
+        local function UpdateToggleDrag(input)
+            local delta = input.Position - dragStart
+            ToggleWindow.Position = UDim2.new(
+                startPos.X.Scale,
+                startPos.X.Offset + delta.X,
+                startPos.Y.Scale,
+                startPos.Y.Offset + delta.Y
+            )
+        end
 
-        local ToggleWindowButton = utils.create('TextButton', {
-            Parent = ToggleWindow,
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-            BackgroundTransparency = 1.000,
-            BorderColor3 = Color3.fromRGB(0, 0, 0),
-            BorderSizePixel = 0,
-            Size = UDim2.new(1, 0, 1, 0),
-            Font = Enum.Font.SourceSans,
-            Text = "",
-            TextColor3 = Color3.fromRGB(0, 0, 0),
-            TextSize = 14.000,
-        })
+        ToggleWindow.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or
+               input.UserInputType == Enum.UserInputType.Touch then
+                dragging = true
+                dragStart = input.Position
+                startPos = ToggleWindow.Position
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then
+                        dragging = false
+                    end
+                end)
+            end
+        end)
 
-        utils.dragify(ToggleWindow, ToggleWindowButton, 0.08, ToggleWindow, true)
+        ToggleWindow.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or
+               input.UserInputType == Enum.UserInputType.Touch then
+                dragInput = input
+            end
+        end)
 
-        ToggleWindowButton.MouseButton1Click:Connect(function()
+        game:GetService("UserInputService").InputChanged:Connect(function(input)
+            if input == dragInput and dragging then
+                UpdateToggleDrag(input)
+            end
+        end)
+
+        ToggleWindow.MouseButton1Click:Connect(function()
             game:GetService("VirtualInputManager"):SendKeyEvent(true,"LeftControl",false,game)
             game:GetService("VirtualInputManager"):SendKeyEvent(false,"LeftControl",false,game)
         end)
