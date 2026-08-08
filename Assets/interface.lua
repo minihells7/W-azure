@@ -431,7 +431,7 @@ local UiIntilize = {
         {Mode="Toggle",Title="Tushita Hop (Need All Haki Colors)",Description="Auto Chest + Auto Elite Till Find Cup And Spawn Then Get Tushita",Args={"Tushita Hop__1","Enable"}},
         {Mode="Toggle",Title="Raid Fruit Hop",Description="Pirate Raid + Collect Fruit + Raid Hop" ,Args={"Raid Fruit Hop","Enable"}},
         {Mode="Toggle",Title="Auto Law",Description="Auto Farm Law",Args={"Law","Enable"}},
-        {Mode="Toggle",Title="Auto Cyborg [Premium]",Description="Auto Chest For Fist Then Auto Law",Args={"Fully Cyborg","Enable"}},
+        {Mode="Toggle",Title="Auto Cyborg",Description="Auto Chest For Fist Then Auto Law",Args={"Fully Cyborg","Enable"}},
         {Mode="Toggle",Title="Auto Ghoul Hop",Description="Auto Find Torch + Ghoul (Very Rare, Dont Recommend)",Args={"Fully Ghoul","Enable"}},
         {Mode="Toggle",Title="Boss Snipe Hop",Description="",Args={"BossSniper","Hop"}},
         {Mode="Section",Title="Chest:"},
@@ -661,7 +661,7 @@ local UiIntilize = {
         },
         {
             Mode = "Toggle",
-            Title = "Snipe Mirage Fruit [Premium]",
+            Title = "Snipe Mirage Fruit",
             Description = "Stackable with Auto Farm, Snipe If In Mirage Fruit Stock And Mirage Dealer Appear",
             Args = {"Mirage Snipe Fruit", "Enable"},
             OnChange = function(state)
@@ -940,7 +940,7 @@ local UiIntilize = {
         },
         {
             Mode = "Toggle",
-            Title = "Auto Kill Near Player [Premium]",
+            Title = "Auto Kill Near Player",
             Description = "Use Very Fast Attack",
             Args = {"Pvp", "AutoKillNear"},
             OnChange = function(state)
@@ -1482,7 +1482,7 @@ local UiIntilize = {
         end},
         {
             Mode = "Toggle",
-            Title = "Fully Auto Finish Trial [Premium]",
+            Title = "Fully Auto Finish Trial",
             Description = "Train, Auto Kill After Trial, Auto Activate Race",
             Args = {"FullyAutoTrial", "Enable"},
             OnChange = function(state)
@@ -1556,7 +1556,7 @@ local UiIntilize = {
         },
         {
             Mode = "Toggle",
-            Title = "Auto Kill After Trial [Premium]",
+            Title = "Auto Kill After Trial",
             Args = {"Trial", "AutoKill"},
             OnChange = function(state)
                 getgenv().Setting.Trial.AutoKill = state
