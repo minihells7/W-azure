@@ -1,7 +1,7 @@
 repeat wait()
 until getgenv().LoadUi and getgenv().IslandCaller and getgenv().SettingManager and getgenv().Fluent
 local LP = game.Players.LocalPlayer
-local Title = "Volt Hub" .. (getgenv().Premium and " [Premium]" or "")
+local Title = "Volt Hub [ Beta ]"
 local SubTitle = ""
 local Fluent = getgenv().Fluent
 local UiSetting = Fluent.Options
@@ -289,7 +289,7 @@ local UiIntilize = {
         {Mode="Toggle",Title="Accept Quest",Description="For Bone And Katakuri, Have A Chance of Getting Reseted(Noone  yet)",Args={"AcceptQuest_Bone_Katakuri","Enable"}},
         {Mode="Toggle",Title="Kill Aura",Description="Farm Near Lv Mob Or Near Position",Args={"Kill Aura","Enable"}},
         {Mode="Toggle",Title="Fully Auto Dough King",Description="",Args={"Full Dough King","Enable"}},
-        --[[{Mode="Label",Title="Setting For Auto Farm"},
+        {Mode="Label",Title="Setting For Auto Farm"},
         {Mode="Label",Title="Anchor Position"},
         {Mode="Toggle",Title="TP Back Anchor Position",Description="If Exceed Anchor Position Will Tp Back To Anchor Position",Args={"Kill Aura","AnchorTPBack"}},
         {Mode="Button",Title="Set Anchor Position",Callback=function ()
@@ -305,7 +305,7 @@ local UiIntilize = {
             return Table
         end)(),Default=getgenv().Setting["Kill Aura"].DistanceFromAnchor/400,OnChange=function (state)
             getgenv().Setting["Kill Aura"].DistanceFromAnchor = state
-        end},]]
+        end},
         {Mode="Toggle",Title="Use Sword",Args = {"Mastery","Sword"}},
         {Mode="Toggle",Title="Sword Switcher",Description="Switch Sword When Have Enough Skills (Default) or Max Mastery",Args={"SwordSwitcher","Enable"}},
         {Mode="Toggle",Title="Only Switch Max Mastery",Description="Only Switch When Max Mastery",Args={"SwordSwitcher","MaxMastery"}},
