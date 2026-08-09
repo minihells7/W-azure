@@ -166,7 +166,7 @@ do
     	end)
     end
     local ScreenGui = utils.create('ScreenGui', {
-        Name = "VoltToggle",
+        Name = "minikklj",
         Parent = game.CoreGui,
         IgnoreGuiInset = true,
         ResetOnSpawn = false,
@@ -174,20 +174,42 @@ do
         ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     })
 
-        local ToggleWindow = utils.create('ImageButton', {
+        local ToggleWindow = utils.create('TextButton', {
             Parent = ScreenGui,
-            Size = UDim2.fromOffset(46, 46),
+            Size = UDim2.fromOffset(70, 56),
             Position = UDim2.new(0, 20, 0, 20),
-            BackgroundTransparency = 1,
-            Image = "rbxassetid://94741990242507",
-            ScaleType = Enum.ScaleType.Fit,
+            BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+            BackgroundTransparency = 0,
             AutoButtonColor = false,
+            Text = "",
+            BorderSizePixel = 0,
+        })
+
+        utils.create('UICorner', {
+            CornerRadius = UDim.new(0, 12),
+            Parent = ToggleWindow,
+        })
+
+        utils.create('UIStroke', {
+            Parent = ToggleWindow,
+            Color = Color3.fromRGB(174, 92, 255),
+            Thickness = 1.5,
+            Transparency = 0,
+        })
+
+        local ToggleImage = utils.create('ImageLabel', {
+            Parent = ToggleWindow,
+            Size = UDim2.fromOffset(46, 46),
+            Position = UDim2.new(0.5, -23, 0.5, -23),
+            BackgroundTransparency = 1,
+            Image = "rbxassetid://103329441385920",
+            ScaleType = Enum.ScaleType.Fit,
             ImageTransparency = 0,
         })
 
         utils.create('UICorner', {
             CornerRadius = UDim.new(1, 0),
-            Parent = ToggleWindow,
+            Parent = ToggleImage,
         })
 
         local dragging, dragInput, dragStart, startPos
