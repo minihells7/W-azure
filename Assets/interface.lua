@@ -1,7 +1,7 @@
 repeat wait()
 until getgenv().LoadUi and getgenv().IslandCaller and getgenv().SettingManager and getgenv().Fluent
 local LP = game.Players.LocalPlayer
-local Title = "Volt Hub [ Beta ]"
+local Title = "Mythical island  [ Beta ]"
 local SubTitle = ""
 local Fluent = getgenv().Fluent
 local UiSetting = Fluent.Options
@@ -282,8 +282,10 @@ local UiIntilize = {
             Args = {"FarmMode","StartEnable"},
             OnChange = function(state)
                 local Args = FarmModeMap[getgenv().Setting.FarmMode.Selected]
+                print("[DEBUG Interface StartFarm] state="..tostring(state).." Selected="..tostring(getgenv().Setting.FarmMode.Selected).." Args="..tostring(Args and (Args[1].."."..Args[2])))
                 if Args and getgenv().Setting[Args[1]] then
                     getgenv().Setting[Args[1]][Args[2]] = state
+                    print("[DEBUG Interface StartFarm] Setting."..Args[1].."."..Args[2].." agora = "..tostring(getgenv().Setting[Args[1]][Args[2]]))
                 end
             end
         },
