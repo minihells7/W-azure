@@ -731,8 +731,7 @@ local UiIntilize = {
         },
         {
             Mode = "Dropdown",
-            Title = "Auto Add Stats",
-            Description = "",
+            Title = "Select Stats",
             Args = {"LocalPlayer", "AutoAddStatsType"},
             Table = {"Melee","Defense","Sword","Gun","Fruit"},
             Default = (function ()
