@@ -730,6 +730,48 @@ local UiIntilize = {
             end
         },
         {
+            Mode = "Dropdown",
+            Title = "Auto Add Stats",
+            Description = "",
+            Args = {"LocalPlayer", "AutoAddStatsType"},
+            Table = {"Melee","Defense","Sword","Gun","Fruit"},
+            Default = (function ()
+                local Default = {"Melee","Defense","Sword","Gun","Fruit"}
+                local Found = 1
+                if not table.find(Default,getgenv().Setting.LocalPlayer.AutoAddStatsType) then
+                    getgenv().Setting.LocalPlayer.AutoAddStatsType = "Melee"
+                else
+                    Found = table.find(Default,getgenv().Setting.LocalPlayer.AutoAddStatsType)
+                end
+                return Found
+            end)(),
+            OnChange = function(value)
+                getgenv().Setting.LocalPlayer.AutoAddStatsType = value
+                SettingManager:Save()
+            end
+        },
+        {
+            Mode = "Slider",
+            Title = "Stats Quantity",
+            Args = {"LocalPlayer", "AutoAddStatsQty"},
+            Default = getgenv().Setting.LocalPlayer.AutoAddStatsQty,
+            Min = 0,
+            Max = 100,
+            OnChange = function(value)
+                getgenv().Setting.LocalPlayer.AutoAddStatsQty = value
+                SettingManager:Save()
+            end
+        },
+        {
+            Mode = "Toggle",
+            Title = "Auto Stats",
+            Args = {"LocalPlayer", "AutoAddStatsEnable"},
+            OnChange = function(state)
+                getgenv().Setting.LocalPlayer.AutoAddStatsEnable = state
+                SettingManager:Save()
+            end
+        },
+        {
             Mode = "Toggle",
             Title = "No Clip",
             Args = {"LocalPlayer", "NoClip"},
