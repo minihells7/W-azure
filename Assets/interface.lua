@@ -882,6 +882,14 @@ local UiIntilize = {
                 getgenv().Setting.LocalPlayer.Speed = value
                 SettingManager:Save()
             end
+        },
+        {
+            Mode = "Button",
+            Title = "Redeem All Codes",
+            Callback = function()
+                IslandCaller("RedeemAllCode")
+
+            end
         }
     },
     ["Travel"] = {
