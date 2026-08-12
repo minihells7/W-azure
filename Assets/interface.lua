@@ -935,6 +935,11 @@ local UiIntilize = {
     },
     ["Travel"] = {
         {Mode="Section",Title="Travel:"},
+        {
+            Mode = "Toggle",
+            Title = "Auto Travel Dressrosa",
+            Args = {"AutoTravelDressrosa", "Enable"},
+        },
         {Mode="Button",Title="Stop Tween",Callback=function() IslandCaller("StopTween") end},
         {Mode="Button",Title="Travel Sea 1",Callback=function ()
             IslandCaller("Travel","Sea1")
