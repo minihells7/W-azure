@@ -165,7 +165,7 @@ do
     		end
     	end)
     end
-    local ScreenGui = utils.create('ScreenGui', {
+    --[[local ScreenGui = utils.create('ScreenGui', {
         Name = "minikklj",
         Parent = game.CoreGui,
         IgnoreGuiInset = true,
@@ -255,7 +255,7 @@ do
             game:GetService("VirtualInputManager"):SendKeyEvent(true,"LeftControl",false,game)
             game:GetService("VirtualInputManager"):SendKeyEvent(false,"LeftControl",false,game)
         end)
-end
+end]]
 getgenv().Setting.FarmMode = getgenv().Setting.FarmMode or {}
 if getgenv().Setting.FarmMode.Selected == nil then
     getgenv().Setting.FarmMode.Selected = "Auto Farm Level"
