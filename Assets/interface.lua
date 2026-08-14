@@ -165,7 +165,8 @@ do
     		end
     	end)
     end
-    --[[local ScreenGui = utils.create('ScreenGui', {
+end -- fecha o "do" da linha 83 (estava sem fechamento pq o end original virou comentário)
+--[[local ScreenGui = utils.create('ScreenGui', {
         Name = "minikklj",
         Parent = game.CoreGui,
         IgnoreGuiInset = true,
