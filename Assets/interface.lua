@@ -539,7 +539,7 @@ local UiIntilize = {
             Description = "Unlocks V2 and V3 Draco",
             Args = {"UnlockDracoV3", "Enable"},
             OnChange = function(state)
-                getgenv().Setting.UnlockDracoV3.Enable = state -- api retorna
+                getgenv().Setting.UnlockDracoV3.Enable = state
             end
         },
         {
@@ -549,6 +549,16 @@ local UiIntilize = {
             Args = {"FullyDracoTrial", "Enable"},
             OnChange = function(state)
                 getgenv().Setting.FullyDracoTrial.Enable = state
+            end
+        },
+        {Mode = "Section", Title = "Draco V4:"},
+        {
+            Mode = "Toggle",
+            Title = "Auto Buy Gear Draco",
+            Description = "",
+            Args = {"BuyGearDraco", "Enable"},
+            OnChange = function(state)
+                getgenv().Setting.BuyGearDraco.Enable = state
             end
         },
     },
