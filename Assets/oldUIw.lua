@@ -1503,12 +1503,12 @@ local UiIntilize = {
             Mode = "Dropdown",
             Title = "Tween Speed",
             Args = {"Tween", "Speed"},
-            Table = {250,275,300,325,350},
+            Table = {150,155,180,190,200},
             Default = (function ()
-                local Default = {250,275,300,325,350}
+                local Default = {150,155,180,190,200}
                 local Found = 1
                 if not table.find(Default,getgenv().Setting.Tween.Speed) then 
-                    getgenv().Setting.Tween.Speed = 250 
+                    getgenv().Setting.Tween.Speed = 200
                 else
                     Found = table.find(Default,getgenv().Setting.Tween.Speed) 
                 end
