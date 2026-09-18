@@ -70,7 +70,7 @@ LoadTranslation()
 
 local UiOrders
 if getgenv().OneClickUi then
-    UiOrders = {"Status","Setting","Game-Server"}
+    UiOrders = {"Status","Setting","Game-Server","One-Click"}
 else
      UiOrders = {"Farm Main","Stack Farm","Sub Farming","Dojo Quest","Prehistoric Island","Status","Fruit","Local Player","Travel","PvP","Raid","Miragem-V4","Sea Events","Shop","Setting","Game-Server"}
 end
