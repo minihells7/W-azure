@@ -21,11 +21,34 @@ end
 local Window = getgenv().Window
 local UiOrders
 if getgenv().OneClickUi then
-    UiOrders = {"Status","Setting","Game-Server","One Click","One Click Debugger"}
+    UiOrders = {"Sub Farming","Vocalnic","Prehistoric island","Status","Setting","Game-Server","One Click","One Click Debugger"}
 else
-     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Vocalnic","Status","Player-Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Sub Class","Shop","Setting","Webhook","Game-Server","One Click","One Click Debugger"}
+     UiOrders = {"Main Farm","Stack Auto farm","Sub Farming","Vocalnic","Prehistoric island","Status","Player-Status","Fruit","Local Player","Travel","Pvp-Visual","Raid-Material","RaceV4-Mirage","Sea Events","Sub Class","Shop","Setting","Webhook","Game-Server","One Click","One Click Debugger"}
 end
 local TabCollections = {
+}
+local TabIcons = {
+    ["Main Farm"] = "sword",
+    ["Stack Auto farm"] = "layers",
+    ["Sub Farming"] = "hammer",
+    ["Vocalnic"] = "flame",
+    ["Prehistoric island"] = "mountain",
+    ["Status"] = "activity",
+    ["Player-Status"] = "user",
+    ["Fruit"] = "apple",
+    ["Local Player"] = "user-cog",
+    ["Travel"] = "compass",
+    ["Pvp-Visual"] = "crosshair",
+    ["Raid-Material"] = "package",
+    ["RaceV4-Mirage"] = "sparkles",
+    ["Sea Events"] = "waves",
+    ["Sub Class"] = "anchor",
+    ["Shop"] = "shopping-cart",
+    ["Setting"] = "settings",
+    ["Webhook"] = "send",
+    ["Game-Server"] = "server",
+    ["One Click"] = "zap",
+    ["One Click Debugger"] = "bug",
 }
 ElementsCollection = {}
 for _,Name in pairs(UiOrders) do
@@ -384,6 +407,15 @@ local UiIntilize = {
                 getgenv().Setting.DragonHunterQuest.Enable = state
             end
         },
+        {Mode="Label",Title="Ancient One Draco Status"},
+        {Mode="Toggle",Title="Auto Upgrade Race V2-V3 Draco",Args={"Draco","UpgradeRace"}},
+        {Mode="Toggle",Title="Auto Trial Draco",Args={"Draco","Trial"}},
+        {Mode="Toggle",Title="Fully Trial Draco",Args={"Draco","FullyTrial"}},
+        {Mode="Toggle",Title="Ignore Craft Volcanic Magnet [Fully Draco]",Args={"Draco","IgnoreCraftMagnet"}},
+        {Mode="Toggle",Title="Auto Buy Gear Draco",Args={"Draco","BuyGear"}},
+        {Mode="Toggle",Title="Auto Finish Train Draco Quest",Args={"Draco","FinishTrain"}},
+    },
+    ["Prehistoric island"] = {
         {
             Mode = "Toggle",
             Title = "Auto Find PrehistoricIsland",
@@ -393,7 +425,15 @@ local UiIntilize = {
                 getgenv().Setting.SeaEvents.AutoFindPrehistoricIsland = state
                 SettingManager:Save()
             end
-        }        
+        },
+        {Mode="Toggle",Title="Auto Event Prehistoric Island",Args={"PrehistoricIsland","Event"}},
+        {Mode="Toggle",Title="Fully Event Prehistoric Island",Args={"PrehistoricIsland","FullyEvent"}},
+        {Mode="Toggle",Title="Auto Crafting Volcanic Magnet",Args={"PrehistoricIsland","CraftMagnet"}},
+        {Mode="Toggle",Title="Auto Collect Bone",Args={"PrehistoricIsland","CollectBone"}},
+        {Mode="Toggle",Title="Auto Collect Egg",Args={"PrehistoricIsland","CollectEgg"}},
+        {Mode="Toggle",Title="Use Skull Guitar With Fix Lava",Args={"PrehistoricIsland","SkullGuitarFixLava"}},
+        {Mode="Toggle",Title="Ignore Collect Bone [Fully]",Args={"PrehistoricIsland","IgnoreCollectBone"}},
+        {Mode="Toggle",Title="Ignore Craft Volcanic Magnet [Fully]",Args={"PrehistoricIsland","IgnoreCraftMagnet"}},
     },
     ["Status"] = {
         {Mode="Label",Title="Client Time"},
@@ -1646,6 +1686,57 @@ local UiIntilize = {
         },
         {
             Mode = "Label",
+            Title = "Prehistoric Island Section"
+        },
+        {
+            Mode = "Dropdown",
+            Title = "Select Weapon Kill Golem",
+            Multi = false,
+            Table = {"Melee","Sword","Blox Fruit"},
+            Default = getgenv().Setting.PrehistoricIsland.WeaponKillGolem,
+            OnChange = function(Value)
+                getgenv().Setting.PrehistoricIsland.WeaponKillGolem = Value
+                SettingManager:Save()
+            end
+        },
+        {
+            Mode = "Dropdown",
+            Title = "Select Weapons Fix Lava",
+            Multi = true,
+            Table = {"Melee","Sword","Blox Fruit","Gun"},
+            Default = (function ()
+                local Default = {}
+                for i,v in pairs(getgenv().Setting.PrehistoricIsland.WeaponsFixLava or {}) do
+                    if type(i) == "string" and v then
+                        table.insert(Default,i)
+                    end
+                end
+                return Default
+            end)(),
+            OnChange = function(ReturnTable)
+                local ProxyTable = {}
+                for Value, State in pairs(ReturnTable) do
+                    if type(Value) == "string" then
+                        ProxyTable[Value] = State
+                    end
+                end
+                getgenv().Setting.PrehistoricIsland.WeaponsFixLava = ProxyTable
+                SettingManager:Save()
+            end
+        },
+        {
+            Mode = "Dropdown",
+            Title = "Select Method Kill Golem",
+            Multi = false,
+            Table = {"Click M1","Instant Kill [ Risk and can bug no die mob ]"},
+            Default = getgenv().Setting.PrehistoricIsland.MethodKillGolem,
+            OnChange = function(Value)
+                getgenv().Setting.PrehistoricIsland.MethodKillGolem = Value
+                SettingManager:Save()
+            end
+        },
+        {
+            Mode = "Label",
             Title = "Fruit Skills Setting"
         },
         {
@@ -2051,7 +2142,7 @@ print("Adding Shop Items")
         end
     end
     for _,Name in pairs(UiOrders) do
-        TabCollections[Name] = Window:AddTab({ Title = Name, Icon = "" })
+        TabCollections[Name] = Window:AddTab({ Title = Name, Icon = TabIcons[Name] or "" })
         local Tab = TabCollections[Name]
         for i,v in pairs(UiIntilize[Name]) do   
             if type(v)== 'function' then 
