@@ -327,6 +327,8 @@ local UiIntilize = {
         {Mode="Toggle",Title="Auto Cyborg [Premium]",Description="Auto Chest For Fist Then Auto Law",Args={"Fully Cyborg","Enable"}},
         {Mode="Toggle",Title="Auto Ghoul Hop",Description="Auto Find Torch + Ghoul (Very Rare, Dont Recommend)",Args={"Fully Ghoul","Enable"}},
         {Mode="Toggle",Title="Boss Snipe Hop",Description="",Args={"BossSniper","Hop"}},
+        {Mode="Toggle",Title="Auto Secret Quest",Description="",Args={"Secret Quest","Enable"}},
+        {Mode="Toggle",Title="Hop For Secret Quest",Description="He switches servers if he can't find the mission",Args={"Secret Quest","Hop"}},
         {Mode="Label",Title="Chest Count"},
         {Mode="Toggle",Title="Auto Chest",Description="Stop On God Chalice And Fist Of Darkness By Default",Args={"Collect Chest","Enable"}},
         {Mode="Toggle",Title="Ignore Items - Chest",Description="Enable This To Not Stop On Getting Fist of Darkness Or God Chalice",Args={"Collect Chest","IgnoreItem"}},
